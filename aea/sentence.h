@@ -43,7 +43,6 @@ namespace aea
             bool isNumber();
             bool isDouble();
 
-
             friend std::ostream& operator<<(std::ostream& os, const sentence& obj);
 
         protected:
