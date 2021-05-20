@@ -1,6 +1,6 @@
-#ifndef SENTENCE_H
-#define SENTENCE_H
-#include "BasicContainer.h"
+#ifndef SENTENCE_HPP
+#define SENTENCE_HPP
+#include "BasicContainer.hpp"
 #include <math.h>
 
 
