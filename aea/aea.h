@@ -2,12 +2,12 @@
 #define AEA_H
 
 
-#include "BasicContainer.h"
-#include "var.h"
-#include "sentence.h"
-#include "DArray.h"
-#include "Pointer.h"
-#include "Functions.h"
+#include "BasicContainer.hpp"
+#include "var.hpp"
+#include "sentence.hpp"
+#include "DArray.hpp"
+#include "Pointer.hpp"
+#include "Functions.hpp"
 
 
 #endif  // AEA_H
