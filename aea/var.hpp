@@ -1,7 +1,7 @@
-#ifndef VAR_H
-#define VAR_H
-#include "Functions.h"
-#include "sentence.h"
+#ifndef VAR_HPP
+#define VAR_HPP
+#include "Functions.hpp"
+#include "sentence.hpp"
 #include <stdio.h>
 #include <stdlib.h>
 #include <cctype>
