@@ -1,6 +1,6 @@
-#ifndef BASICCONTAINER_H
-#define BASICCONTAINER_H
-#include "Functions.h"
+#ifndef BASICCONTAINER_HPP
+#define BASICCONTAINER_HPP
+#include "Functions.hpp"
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
