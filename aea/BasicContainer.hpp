@@ -166,38 +166,26 @@ namespace aea
     template<typename T>
     T& BasicContainer<T>::at(const std::uint64_t& position) const
     {
-        T* retValue = nullptr;
-
-        if (begin != nullptr)
+        if (begin == nullptr || position >= (end - begin))
         {
-            if (position >= (end - begin))
-            {   
-                throw std::out_of_range("Index out of range (Index: " + std::to_string(position) + ")");
-            }
-
-            retValue = &begin[position];
+ 
+            throw std::out_of_range("Index out of range (Index: " + std::to_string(position) + ")");
         }
 
-        return *retValue;
+        return begin[position];
     }
 
 
     template<typename T>
     T& BasicContainer<T>::operator[](const std::uint64_t& position) const
     {
-        T* retValue = nullptr;
-
-        if (begin != nullptr)
+        if (begin == nullptr || position >= (end - begin))
         {
-            if (position >= (end - begin))
-            {   
-                throw std::out_of_range("Index out of range (Index: " + std::to_string(position) + ")");
-            }
-
-            retValue = &begin[position];
+ 
+            throw std::out_of_range("Index out of range (Index: " + std::to_string(position) + ")");
         }
 
-        return *retValue;
+        return begin[position];
     }
 
 
