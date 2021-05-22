@@ -27,7 +27,6 @@ namespace aea
             sentence& operator=(sentence&& obj);
 
             operator std::string();
-            operator char*();
 
             sentence& operator+=(char c);
             sentence& operator+=(const sentence& obj);
@@ -38,8 +37,8 @@ namespace aea
             void remove(const std::uint64_t& position);
             void toUpper();
             void toLower();
-	    bool contains(sentence str);
-	    bool contains(sentence str, const size_t& at);
+		    bool contains(sentence str);
+		    bool contains(sentence str, const size_t& at);
             long double toNumber();
             bool isNumber();
             bool isDouble();
@@ -47,7 +46,7 @@ namespace aea
 
             friend sentence& operator<<(sentence& obj, const sentence& str);
             friend std::ostream& operator<<(std::ostream& os, const sentence& obj);
-            
+
 
         protected:
             std::ostream& print(std::ostream& os) const;
@@ -209,24 +208,7 @@ namespace aea
 
         return std::string();
     }
-
-
-    sentence::operator char*()
-    {
-        if (this->begin != nullptr)
-        {
-            const std::uint64_t size = (this->end - this->begin);
-            char retValue[size + 1];
-
-            strncpy(retValue, this->begin, size);
-            retValue[size] = '\0';
-
-            return retValue;
-        }
-
-        return "";
-    }
-
+    
 
     sentence& sentence::operator+=(char c)
     {
