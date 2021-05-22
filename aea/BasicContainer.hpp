@@ -33,6 +33,8 @@ namespace aea
 
             virtual std::uint64_t size() const;
             virtual T* get() const;
+            T* first() const;
+            T* last() const;
             virtual T& at(const std::uint64_t& position) const;
             virtual T& operator[](const std::uint64_t& position) const;
             virtual void reset();
@@ -161,6 +163,19 @@ namespace aea
         return begin;
     }
 
+
+    template<typename T>
+    T* BasicContainer<T>::first() const
+    {
+        return begin;
+    }
+
+
+    template<typename T>
+    T* BasicContainer<T>::last() const
+    {
+        return (end - 1);
+    }
 
 
     template<typename T>
