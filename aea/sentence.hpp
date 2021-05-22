@@ -37,8 +37,8 @@ namespace aea
             void remove(const std::uint64_t& position);
             void toUpper();
             void toLower();
-		    bool contains(sentence str);
-		    bool contains(sentence str, const size_t& at);
+	    bool contains(sentence str);
+	    bool contains(sentence str, const size_t& at);
             long double toNumber();
             bool isNumber();
             bool isDouble();
