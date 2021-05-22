@@ -26,24 +26,28 @@ namespace aea
             sentence& operator=(const sentence& obj);
             sentence& operator=(sentence&& obj);
 
+            operator std::string();
+            operator char*();
+
             sentence& operator+=(char c);
             sentence& operator+=(const sentence& obj);
             friend sentence operator+(const sentence& obj, const sentence& obj2);
 
-            friend bool operator==(const sentence& it, const sentence& it2);
-            friend bool operator!=(const sentence& it, const sentence& it2);
-
+            bool equal(const sentence& obj) const;
             void insert(const std::uint64_t& position, char c);
             void remove(const std::uint64_t& position);
             void toUpper();
             void toLower();
 	    bool contains(sentence str);
 	    bool contains(sentence str, const size_t& at);
-            long double ston();
+            long double toNumber();
             bool isNumber();
             bool isDouble();
+            bool empty() const;
 
+            friend sentence& operator<<(sentence& obj, const sentence& str);
             friend std::ostream& operator<<(std::ostream& os, const sentence& obj);
+            
 
         protected:
             std::ostream& print(std::ostream& os) const;
@@ -195,6 +199,35 @@ namespace aea
     }
 
 
+    sentence::operator std::string()
+    {
+        if (this->begin != nullptr)
+        {
+            std::string retValue(this->begin, (this->end - this->begin));
+            return retValue;
+        }
+
+        return std::string();
+    }
+
+
+    sentence::operator char*()
+    {
+        if (this->begin != nullptr)
+        {
+            const std::uint64_t size = (this->end - this->begin);
+            char retValue[size + 1];
+
+            strncpy(retValue, this->begin, size);
+            retValue[size] = '\0';
+
+            return retValue;
+        }
+
+        return "";
+    }
+
+
     sentence& sentence::operator+=(char c)
     {
         const std::uint64_t size = (this->end - this->begin) + 1;
@@ -243,28 +276,22 @@ namespace aea
     }
 
 
-    bool operator==(const sentence& obj, const sentence& obj2)
+    bool sentence::equal(const sentence& obj) const
     {
-        if (obj.size() != obj2.size())
+        if (this->size() != obj.size())
         {
             return false;
         }
 
         for (std::uint64_t i = 0; i < obj.size(); ++i)
         {
-            if (obj.at(i) != obj2.at(i))
+            if (this->begin[i] != obj.begin[i])
             {
                 return false;
             }
         }
 
         return true;
-    }
-
-
-    bool operator!=(const sentence& obj, const sentence& obj2)
-    {
-        return !(obj == obj2);
     }
 
 
@@ -447,7 +474,7 @@ namespace aea
     {
         if (this->begin != nullptr)
         {
-            if (*this == "." || *this == "-") 
+            if (equal(sentence(".")) == true || equal(sentence("-")) == true) 
             { 
                 return false; 
             }
@@ -510,7 +537,13 @@ namespace aea
     }
 
 
-    long double sentence::ston()
+    bool sentence::empty() const
+    {
+        return (this->begin == nullptr);
+    }
+
+
+    long double sentence::toNumber()
     {
         if (this->begin == nullptr || isNumber() == false) 
         { 
@@ -561,6 +594,13 @@ namespace aea
         }
 
         return vys;
+    }
+
+
+    sentence& operator<<(sentence& obj, const sentence& str)
+    {
+        obj += str;
+        return obj;
     }
 
 
