@@ -174,7 +174,12 @@ namespace aea
     template<typename T>
     T* BasicContainer<T>::last() const
     {
-        return (end - 1);
+        if (end != nullptr)
+        {
+            return (end - 1);
+        }
+
+        return nullptr;
     }
 
 
