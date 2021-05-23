@@ -41,7 +41,7 @@ namespace aea
     DArray<T>::DArray(const std::uint64_t& size)
     {
         this->begin = new T[size];
-        this->end = (this->begin + size);
+        this->end = (this->begin + size - 1);
     }
 
 
@@ -72,7 +72,7 @@ namespace aea
         if (ptr != nullptr && size > 0)
         {
             this->begin = new T[size];
-            this->end = (this->begin + size);
+            this->end = (this->begin + size - 1);
 
             aea::arrcpy(this->begin, ptr, size);
         }
@@ -89,7 +89,7 @@ namespace aea
             const std::uint64_t size = obj.size();
 
             this->begin = new T[size];
-            this->end = (this->begin + size);
+            this->end = (this->begin + size - 1);
 
             aea::arrcpy(this->begin, obj.begin, size);
         }
@@ -118,7 +118,7 @@ namespace aea
     {
         os.flush();
 
-        for (std::uint64_t i = 0; i < (this->end - this->begin); ++i)
+        for (std::uint64_t i = 0; i < this->size(); ++i)
         {
             os << this->begin[i] << ' ';
         }
@@ -142,14 +142,14 @@ namespace aea
         if (size == 0) { return; }
 
         this->begin = new T[size];
-        this->end = (this->begin + size);
+        this->end = (this->begin + size - 1);
     }
 
 
     template<typename T>
     void DArray<T>::pushback(const T& item)
     {
-        const std::uint64_t size = std::uint64_t(this->end - this->begin) + 1;
+        const std::uint64_t size = this->size() + 1;
 
         T* data = new T[size];
         aea::arrcpy(data, this->begin, (size - 1));
@@ -159,14 +159,14 @@ namespace aea
         data[size - 1] = item;
 
         this->begin = data;
-        this->end = (this->begin + size);
+        this->end = (this->begin + size - 1);
     }
 
 
     template<typename T>
     void DArray<T>::popback()
     {
-        const std::uint64_t size = std::uint64_t(this->end - this->begin) - 1;
+        const std::uint64_t size = this->size() - 1;
 
         T* data = new T[size];
         aea::arrcpy(data, this->begin, size);
@@ -174,14 +174,14 @@ namespace aea
         this->reset();
 
         this->begin = data;
-        this->end = (this->begin + size);
+        this->end = (this->begin + size - 1);
     }
 
 
     template<typename T>
     void DArray<T>::pushfront(const T& item)
     {
-        const std::uint64_t size = std::uint64_t(this->end - this->begin) + 1;
+        const std::uint64_t size = this->size() + 1;
 
         T* data = new T[size];
         aea::arrcpy((data + 1), this->begin, (size - 1));
@@ -191,14 +191,14 @@ namespace aea
         data[0] = item;
 
         this->begin = data;
-        this->end = (this->begin + size);
+        this->end = (this->begin + size - 1);
     }
 
 
     template<typename T>
     void DArray<T>::popfront()
     {
-        const std::uint64_t size = std::uint64_t(this->end - this->begin) - 1;
+        const std::uint64_t size = this->size() - 1;
 
         T* data = new T[size];
         aea::arrcpy(data, (this->begin + 1), size);
@@ -206,19 +206,19 @@ namespace aea
         this->reset();
 
         this->begin = data;
-        this->end = (this->begin + size);
+        this->end = (this->begin + size - 1);
     }
 
 
     template<typename T>
     void DArray<T>::insert(const std::uint64_t& position, const T& item)
     {
-        if (this->begin == nullptr || position >= (this->end - this->begin))
+        if (this->begin == nullptr || position >= this->size())
         {
             throw std::out_of_range("Index out of range (Index: " + std::to_string(position) + ")");
         }
 
-        const std::uint64_t size = (this->end - this->begin) + 1;
+        const std::uint64_t size = this->size() + 1;
         T* data = new T[size];
 
         for (std::uint64_t i = 0; i < size; ++i)
@@ -239,19 +239,19 @@ namespace aea
         data[position] = item;
 
         this->begin = data;
-        this->end = (this->begin + size);
+        this->end = (this->begin + size - 1);
     }
 
 
     template<typename T>
     void DArray<T>::remove(const std::uint64_t& position)
     {
-        if (this->begin == nullptr || position >= (this->end - this->begin))
+        if (this->begin == nullptr || position >= this->size())
         {
             throw std::out_of_range("Index out of range (Index: " + std::to_string(position) + ")");
         }
 
-        const std::uint64_t size = (this->end - this->begin) - 1;
+        const std::uint64_t size = this->size() - 1;
         T* data = new T[size];
 
         for (std::uint64_t i = 0; i < size; ++i)
@@ -270,7 +270,7 @@ namespace aea
         this->reset();
 
         this->begin = data;
-        this->end = (this->begin + size);
+        this->end = (this->begin + size - 1);
     }
 }
 

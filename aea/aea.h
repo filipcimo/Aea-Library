@@ -8,6 +8,8 @@
 #include "DArray.hpp"
 #include "Pointer.hpp"
 #include "Functions.hpp"
+#include "ListNode.hpp"
+#include "List.hpp"
 
 
 #endif  // AEA_H

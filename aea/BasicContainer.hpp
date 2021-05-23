@@ -57,7 +57,7 @@ namespace aea
         const std::uint64_t size = list.size();
 
         begin = new T[size];
-        end = (begin + size);
+        end = (begin + size - 1);
 
         for (std::uint64_t i = 0; i < size; ++i)
         {
@@ -69,10 +69,10 @@ namespace aea
     template<typename T>
     BasicContainer<T>::BasicContainer(const BasicContainer<T>& obj)
     {
-        const std::uint64_t size = (obj.end - obj.begin);
+        const std::uint64_t size = obj.size();
 
         begin = new T[size];
-        end = (begin + size);
+        end = (begin + size - 1);
 
         for (std::uint64_t i = 0; i < size; ++i)
         {
@@ -98,12 +98,12 @@ namespace aea
     {
         if (begin != nullptr)
         {
-            if ((end - begin) == 1)
+            if (size() == 1)
             {
                 delete begin;
             }
 
-            else if ((end - begin) > 1)
+            else if (size() > 1)
             {
                 delete [] begin;
             }
@@ -121,7 +121,7 @@ namespace aea
             const std::uint64_t size = obj.size();
 
             begin = new T[size];
-            end = (begin + size);
+            end = (begin + size - 1);
 
             aea::arrcpy(begin, obj.begin, size);
         }
@@ -150,7 +150,7 @@ namespace aea
     {
         if (begin != nullptr)
         {
-            return (end - begin);
+            return (std::uint64_t(end - begin) + 1);
         }
 
         return 0;
@@ -176,7 +176,7 @@ namespace aea
     {
         if (end != nullptr)
         {
-            return (end - 1);
+            return end;
         }
 
         return nullptr;
@@ -186,9 +186,8 @@ namespace aea
     template<typename T>
     T& BasicContainer<T>::at(const std::uint64_t& position) const
     {
-        if (begin == nullptr || position >= (end - begin))
+        if (begin == nullptr || position >= size())
         {
- 
             throw std::out_of_range("Index out of range (Index: " + std::to_string(position) + ")");
         }
 
@@ -199,9 +198,8 @@ namespace aea
     template<typename T>
     T& BasicContainer<T>::operator[](const std::uint64_t& position) const
     {
-        if (begin == nullptr || position >= (end - begin))
+        if (begin == nullptr || position >= size())
         {
- 
             throw std::out_of_range("Index out of range (Index: " + std::to_string(position) + ")");
         }
 
@@ -214,12 +212,12 @@ namespace aea
     {
         if (begin != nullptr)
         {
-            if ((end - begin) == 1)
+            if (size() == 1)
             {
                 delete begin;
             }
 
-            else if ((end - begin) > 1)
+            else if (size() > 1)
             {
                 delete [] begin;
             }

@@ -37,8 +37,8 @@ namespace aea
             void remove(const std::uint64_t& position);
             void toUpper();
             void toLower();
-	    bool contains(sentence str);
-	    bool contains(sentence str, const size_t& at);
+		    bool contains(sentence str);
+		    bool contains(sentence str, const size_t& at);
             long double toNumber();
             bool isNumber();
             bool isDouble();
@@ -57,7 +57,7 @@ namespace aea
     sentence::sentence(char c)
     {
         this->begin = new char(c);
-        this->end = (this->begin + sizeof(char));
+        this->end = this->begin;
     }
 
 
@@ -66,7 +66,7 @@ namespace aea
         const std::uint64_t size = strlen(str); 
 
         this->begin = new char[size];
-        this->end = (this->begin + size);
+        this->end = (this->begin + size - 1);
 
         strncpy(this->begin, str, size);
     }
@@ -77,7 +77,7 @@ namespace aea
         const std::uint64_t size = str.size(); 
 
         this->begin = new char[size];
-        this->end = (this->begin + size);
+        this->end = (this->begin + size - 1);
 
         strncpy(this->begin, str.data(), size);
     }
@@ -106,7 +106,7 @@ namespace aea
         this->reset();
 
         this->begin = new char(c);
-        this->end = (this->begin + sizeof(char));
+        this->end = this->begin;
 
         return *this;
     }
@@ -121,7 +121,7 @@ namespace aea
             const std::uint64_t size = strlen(str);
 
             this->begin = new char[size];
-            this->end = (this->begin + size);
+            this->end = (this->begin + size - 1);
 
             strncpy(this->begin, str, size);
         }
@@ -139,7 +139,7 @@ namespace aea
             const std::uint64_t size = str.size();
 
             this->begin = new char[size];
-            this->end = (this->begin + size);
+            this->end = (this->begin + size - 1);
 
             strncpy(this->begin, str.data(), size);
         }
@@ -155,7 +155,7 @@ namespace aea
         const std::uint64_t size = list.size();
 
         this->begin = new char[size];
-        this->end = (this->begin + size);
+        this->end = (this->begin + size - 1);
 
         for (std::uint64_t i = 0; i < size; ++i)
         {
@@ -175,7 +175,7 @@ namespace aea
             const std::uint64_t size = obj.size();
 
             this->begin = new char[size];
-            this->end = (this->begin + size);
+            this->end = (this->begin + size - 1);
 
             strncpy(this->begin, obj.begin, size);
         }
@@ -202,7 +202,7 @@ namespace aea
     {
         if (this->begin != nullptr)
         {
-            std::string retValue(this->begin, (this->end - this->begin));
+            std::string retValue(this->begin, this->size());
             return retValue;
         }
 
@@ -212,7 +212,7 @@ namespace aea
 
     sentence& sentence::operator+=(char c)
     {
-        const std::uint64_t size = (this->end - this->begin) + 1;
+        const std::uint64_t size = this->size() + 1;
 
         char* data = new char[size];
         strncpy(data, this->begin, (size - 1));
@@ -222,7 +222,7 @@ namespace aea
         data[size - 1] = c;
 
         this->begin = data;
-        this->end = (this->begin + size);
+        this->end = (this->begin + size - 1);
 
         return *this;
     }
@@ -232,7 +232,7 @@ namespace aea
     {
         if (obj.begin != nullptr)
         {
-            const std::uint64_t size = (this->end - this->begin);
+            const std::uint64_t size = this->size();
 
             char* data = new char[size];
             strncpy(data, this->begin, size);
@@ -242,7 +242,7 @@ namespace aea
             strncpy((data + size), obj.begin, obj.size());
 
             this->begin = data;
-            this->end = (this->begin + (size + obj.size()));
+            this->end = (this->begin + (size + obj.size()) - 1);
         }
 
         return *this;
@@ -279,12 +279,12 @@ namespace aea
 
     void sentence::insert(const std::uint64_t& position, char c)
     {
-        if (this->begin == nullptr || position >= (this->end - this->begin))
+        if (this->begin == nullptr || position >= this->size())
         {
             throw std::out_of_range("Index out of range (Index: " + std::to_string(position) + ")");
         }
 
-        const std::uint64_t size = (this->end - this->begin) + 1;
+        const std::uint64_t size = this->size() + 1;
         char* data = new char[size];
 
         for (std::uint64_t i = 0; i < size; ++i)
@@ -305,18 +305,18 @@ namespace aea
         data[position] = c;
 
         this->begin = data;
-        this->end = (this->begin + size);
+        this->end = (this->begin + size - 1);
     }
 
 
     void sentence::remove(const std::uint64_t& position)
     {
-        if (this->begin == nullptr || position >= (this->end - this->begin))
+        if (this->begin == nullptr || position >= this->size())
         {
             throw std::out_of_range("Index out of range (Index: " + std::to_string(position) + ")");
         }
 
-        const std::uint64_t size = (this->end - this->begin) - 1;
+        const std::uint64_t size = this->size() - 1;
         char* data = new char[size];
 
         for (std::uint64_t i = 0; i < size; ++i)
@@ -335,7 +335,7 @@ namespace aea
         this->reset();
 
         this->begin = data;
-        this->end = (this->begin + size);
+        this->end = (this->begin + size - 1);
     }
 
 
@@ -376,7 +376,7 @@ namespace aea
             return false;
         }
 
-        const std::uint64_t size = (this->end - this->begin);
+        const std::uint64_t size = this->size();
         std::uint64_t word = 0;
 
         for (std::uint64_t i = 0; i < size; i++)
@@ -414,7 +414,7 @@ namespace aea
             return false;
         }
 
-        const std::uint64_t size = (this->end - this->begin);
+        const std::uint64_t size = this->size();
         std::uint64_t word = 0;
         std::uint64_t counter = 0;
 
@@ -590,7 +590,7 @@ namespace aea
     {
         os.flush();
 
-        for (std::uint64_t i = 0; i < (this->end - this->begin); ++i)
+        for (std::uint64_t i = 0; i < this->size(); ++i)
         {
             os << this->begin[i];
         }

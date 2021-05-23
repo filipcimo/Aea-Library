@@ -36,7 +36,7 @@ namespace aea
     Pointer<T>::Pointer(void* ptr)
     {
         this->begin = static_cast<T*>(ptr);
-        this->end = (this->begin + 1);
+        this->end = (this->begin);
     }
 
 
@@ -44,7 +44,7 @@ namespace aea
     Pointer<T>::Pointer(void* ptr, const std::uint64_t& count)
     {
         this->begin = static_cast<T*>(ptr);
-        this->end = (this->begin + count);
+        this->end = (this->begin + count - 1);
     }
 
 
@@ -74,7 +74,7 @@ namespace aea
     {
         this->reset();
 
-        const std::uint64_t size = (ptr.end - ptr.begin);
+        const std::uint64_t size = ptr.size();
 
         this->begin = new T[size];
 
@@ -108,7 +108,7 @@ namespace aea
     {
         os.flush();
 
-        for (std::uint64_t i = 0; i < (this->end - this->begin); ++i)
+        for (std::uint64_t i = 0; i < this->size(); ++i)
         {
             os << this->begin[i] << ' ';
         }
