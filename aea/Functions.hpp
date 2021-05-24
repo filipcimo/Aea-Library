@@ -11,19 +11,6 @@
 
 namespace aea
 {
-    /*template<typename Type> 
-    ListNode<Type>* iterate(ListNode<Type>** accesser)
-    {
-        if (accesser == nullptr || accesser[0] == nullptr || accesser[0] == accesser[0]->last())
-        {
-            return nullptr;
-        }
-
-        accesser[0] = accesser[0]->nextNode();
-        return accesser[0];
-    }*/
-
-
     char* c_unit(const char* it, const char* it2)
     {
         char* temp = new char[strlen(it) + strlen(it2) + 1];
