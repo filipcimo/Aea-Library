@@ -15,7 +15,7 @@ namespace aea
             List(const List<T>& obj);
             List(List<T>&& obj);
             List(const std::initializer_list<ListNode<T>>& list);
-            ~List();
+            virtual ~List();
 
             List<T>& operator=(const List<T>& obj);
             List<T>& operator=(List<T>&& obj);

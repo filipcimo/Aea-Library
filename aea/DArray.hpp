@@ -60,7 +60,7 @@ namespace aea
 
 
     template<typename T>
-    DArray<T>::DArray(DArray<T>&& obj) : BasicContainer<T>(obj)
+    DArray<T>::DArray(DArray<T>&& obj) : BasicContainer<T>(std::move(obj))
     {
         
     }

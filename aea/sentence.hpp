@@ -95,7 +95,7 @@ namespace aea
     }
 
 
-    sentence::sentence(sentence&& obj) : BasicContainer<char>(obj)
+    sentence::sentence(sentence&& obj) : BasicContainer<char>(std::move(obj))
     {
         
     }

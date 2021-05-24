@@ -10,6 +10,8 @@
 #include "Functions.hpp"
 #include "ListNode.hpp"
 #include "List.hpp"
+#include "Duo.hpp"
+#include "Trio.hpp"
 
 
 #endif  // AEA_H

@@ -63,7 +63,7 @@ namespace aea
 
 
     template<typename T>
-    Pointer<T>::Pointer(Pointer<T>&& ptr) : BasicContainer<T>(ptr)
+    Pointer<T>::Pointer(Pointer<T>&& ptr) : BasicContainer<T>(std::move(ptr))
     {
 
     }
