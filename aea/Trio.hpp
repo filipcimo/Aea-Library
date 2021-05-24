@@ -61,6 +61,8 @@ namespace aea
     template<typename T, typename T2, typename T3>
     Trio<T, T2, T3>& Trio<T, T2, T3>::operator=(const Trio<T, T2, T3>& obj)
     {
+        reset();
+
         Duo<T, T2>* temp = static_cast<Duo<T, T2>*>(this);
         *temp = obj;
 
@@ -73,6 +75,8 @@ namespace aea
     template<typename T, typename T2, typename T3>
     Trio<T, T2, T3>& Trio<T, T2, T3>::operator=(Trio<T, T2, T3>&& obj)
     {
+        reset();
+
         Duo<T, T2>* temp = static_cast<Duo<T, T2>*>(this);
         *temp = std::move(obj);
 
