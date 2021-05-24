@@ -22,6 +22,7 @@ namespace aea
             ListNode<T>& operator=(const ListNode<T>& obj);
             ListNode<T>& operator=(ListNode<T>&& obj);
 
+            void reset();
             T* dataNode() const;
             ListNode<T>* nextNode() const;
             void nextNode(ListNode<T>* ptr);
@@ -110,6 +111,19 @@ namespace aea
         obj.next = nullptr;
 
         return *this;
+    }
+
+
+    template<typename T>
+    void ListNode<T>::reset()
+    {
+        if (data != nullptr)
+        {
+            delete data;
+            data = nullptr;
+        }
+
+        next = nullptr;
     }
 
 

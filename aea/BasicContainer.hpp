@@ -226,6 +226,50 @@ namespace aea
             end = nullptr;
         }
     }
+
+
+    template<typename Type> 
+    Type* iterate_front(Type** accesser, const BasicContainer<Type>& obj, const Type* const start)
+    {
+        if (accesser == nullptr || accesser[0] == obj.last())
+        {
+            return nullptr;
+        }
+
+        else if (accesser[0] == nullptr)
+        {
+            accesser[0] = (Type*) start;
+        }
+
+        else
+        {
+            accesser[0]++;
+        }
+
+        return accesser[0];
+    }
+
+
+    template<typename Type> 
+    Type* iterate_back(Type** accesser, const BasicContainer<Type>& obj, const Type* const start)
+    {
+        if (accesser == nullptr || accesser[0] == obj.first())
+        {
+            return nullptr;
+        }
+
+        else if (accesser[0] == nullptr)
+        {
+            accesser[0] = (Type*) start;
+        }
+
+        else
+        {
+            accesser[0]--;
+        }
+
+        return accesser[0];
+    }
 }
 
 

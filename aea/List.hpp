@@ -338,6 +338,28 @@ namespace aea
     {
         return obj.print(os);
     }
+
+
+    template<typename Type> 
+    ListNode<Type>* iterate_front(ListNode<Type>** accesser, const List<Type>& obj, const ListNode<Type>* const start)
+    {
+        if (accesser == nullptr || accesser[0] == obj.last())
+        {
+            return nullptr;
+        }
+
+        else if (accesser[0] == nullptr)
+        {
+            accesser[0] = (ListNode<Type>*) start;
+        }
+
+        else
+        {
+            accesser[0] = accesser[0]->nextNode();
+        }
+
+        return accesser[0];
+    }
 }
 
 
