@@ -229,9 +229,9 @@ namespace aea
 
 
     template<typename Type> 
-    Type* iterate_front(Type** accesser, const BasicContainer<Type>& obj, const Type* const start)
+    Type* iterate_front(Type** accesser, const BasicContainer<Type>& obj, const Type* const start, const std::uint64_t& by = 1)
     {
-        if (accesser == nullptr || accesser[0] == obj.last())
+        if (accesser == nullptr || accesser[0] >= obj.last())
         {
             return nullptr;
         }
@@ -243,7 +243,7 @@ namespace aea
 
         else
         {
-            accesser[0]++;
+            accesser[0] += by;
         }
 
         return accesser[0];
@@ -251,9 +251,9 @@ namespace aea
 
 
     template<typename Type> 
-    Type* iterate_back(Type** accesser, const BasicContainer<Type>& obj, const Type* const start)
+    Type* iterate_back(Type** accesser, const BasicContainer<Type>& obj, const Type* const start, const std::uint64_t& by = 1)
     {
-        if (accesser == nullptr || accesser[0] == obj.first())
+        if (accesser == nullptr || accesser[0] <= obj.first())
         {
             return nullptr;
         }
@@ -265,7 +265,7 @@ namespace aea
 
         else
         {
-            accesser[0]--;
+            accesser[0] -= by;
         }
 
         return accesser[0];

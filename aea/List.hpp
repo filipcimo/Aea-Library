@@ -341,7 +341,7 @@ namespace aea
 
 
     template<typename Type> 
-    ListNode<Type>* iterate_front(ListNode<Type>** accesser, const List<Type>& obj, const ListNode<Type>* const start)
+    ListNode<Type>* iterate_front(ListNode<Type>** accesser, const List<Type>& obj, const ListNode<Type>* const start, const std::uint64_t& by = 1)
     {
         if (accesser == nullptr || accesser[0] == obj.last())
         {
@@ -355,7 +355,10 @@ namespace aea
 
         else
         {
-            accesser[0] = accesser[0]->nextNode();
+            for (std::uint64_t i = 0; i < by; ++i)
+            {
+                accesser[0] = accesser[0]->nextNode();
+            }
         }
 
         return accesser[0];
