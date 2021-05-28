@@ -23,7 +23,7 @@ namespace aea
         return temp;
     }
 
-
+    
     template<typename FType, typename SType>
     void arrcpy(FType* it, const SType* it2, const std::uint64_t& sz)
     {
@@ -34,9 +34,15 @@ namespace aea
 
         else
         {
-            for (std::uint64_t i = 0; i < sz; i++)
+            FType* accesser1 = (FType*) it;
+            SType* accesser2 = (SType*) it2;
+
+            for (std::uint64_t i = 0; i < sz; ++i)
             {
-                it[i] = it2[i];
+                *accesser1 = *accesser2;
+
+                accesser1 += 1;
+                accesser2 += 1;
             }
         }
     }
