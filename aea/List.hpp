@@ -203,15 +203,8 @@ namespace aea
 
         else
         {
-            ListNode<T>* temp = this->begin;
-
-            while (temp->nextNode() != nullptr)
-            {
-                temp = temp->nextNode();
-            }
-
-            temp->nextNode(node);
-            this->end = temp->nextNode();
+            this->end->nextNode(node);
+            this->end = node;
         }
     }
 
