@@ -32,6 +32,8 @@ namespace aea
             sentence& operator+=(const sentence& obj);
             friend sentence operator+(const sentence& obj, const sentence& obj2);
 
+            sentence& getInput(const char to = '\n');
+            sentence& getInput(const std::uint64_t& size);
             bool equal(const sentence& obj) const;
             void insert(const std::uint64_t& position, char c);
             void remove(const std::uint64_t& position);
@@ -255,6 +257,114 @@ namespace aea
         retValue += obj2;
 
         return retValue;
+    }
+
+
+    sentence& sentence::getInput(const char to)
+    {
+        this->reset();
+
+        const std::uint8_t increaseSize = sizeof(int*);
+        std::uint64_t inputBytes = 0;
+
+        this->begin = new char[increaseSize];
+        this->end = (this->begin + increaseSize - 1);
+        char* position = this->begin;
+
+        while (true)
+        {
+            char inputByte = std::getchar();
+            if (inputByte == to || inputByte == EOF) { break; }
+
+            *position = inputByte;
+            inputBytes += 1;
+
+            if (inputBytes == increaseSize)
+            {
+                const std::uint64_t oldSize = this->size();
+
+                char* beginTemp = new char[oldSize + increaseSize];
+                strncpy(beginTemp, this->begin, oldSize);
+                delete [] this->begin;
+
+                this->begin = beginTemp;
+                this->end = (this->begin + oldSize + increaseSize - 1);
+
+                position = (this->begin + inputBytes - 1);
+            }
+
+            position += 1;
+        }
+
+
+        if (inputBytes < this->size())
+        {
+            if (inputBytes == 0)
+            {
+                delete [] begin;
+                this->begin = nullptr;
+                this->end = nullptr;
+            }
+
+            else if (inputBytes > 0)
+            {
+                char* beginTemp = new char[inputBytes];
+                strncpy(beginTemp, this->begin, inputBytes);
+                delete [] begin;
+
+                this->begin = beginTemp;
+                this->end = (this->begin + inputBytes - 1);
+            }
+        }
+
+        return *this;
+    }
+
+
+    sentence& sentence::getInput(const std::uint64_t& size)
+    {
+        this->reset();
+
+        std::uint64_t inputBytes = 0;
+
+        this->begin = new char[size];
+        this->end = (this->begin + size - 1);
+        char* position = this->begin;
+
+        while (true)
+        {
+            char inputByte = std::getchar();
+            inputBytes += 1;
+
+            if (inputBytes == size && inputByte != EOF) { *position = inputByte; break; }
+            else if (inputBytes == size || inputByte == '\n' || inputByte == EOF) { break; }
+
+            *position = inputByte;
+            position += 1;
+        }
+
+
+        if (inputBytes < size)
+        {
+            if (inputBytes == 0)
+            {
+                delete [] begin;
+                this->begin = nullptr;
+                this->end = nullptr;
+            }
+
+            else if (inputBytes > 0)
+            {
+                char* beginTemp = new char[inputBytes - 1];
+                strncpy(beginTemp, this->begin, inputBytes - 1);
+                delete [] begin;
+
+                this->begin = beginTemp;
+                this->end = (this->begin + inputBytes - 2);
+            }
+        }
+
+        return *this;
     }
 
 
