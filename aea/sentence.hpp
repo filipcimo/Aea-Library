@@ -310,7 +310,7 @@ namespace aea
             {
                 char* beginTemp = new char[inputBytes];
                 strncpy(beginTemp, this->begin, inputBytes);
-                delete [] begin;
+                delete [] this->begin;
 
                 this->begin = beginTemp;
                 this->end = (this->begin + inputBytes - 1);
@@ -357,7 +357,7 @@ namespace aea
             {
                 char* beginTemp = new char[inputBytes - 1];
                 strncpy(beginTemp, this->begin, inputBytes - 1);
-                delete [] begin;
+                delete [] this->begin;
 
                 this->begin = beginTemp;
                 this->end = (this->begin + inputBytes - 2);
