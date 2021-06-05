@@ -42,8 +42,8 @@ namespace aea
             void toUpper();
             void toLower();
             std::int64_t find(const char c, std::uint64_t* lastPosition = nullptr) const;
-		    bool contains(sentence str);
-		    bool contains(sentence str, const size_t& at);
+	    bool contains(sentence str);
+	    bool contains(sentence str, const size_t& at);
             void reverse();
             void reverse(const std::uint64_t& from);
             long double toNumber();
