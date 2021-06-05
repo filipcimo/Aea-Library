@@ -1,5 +1,5 @@
-#ifndef DUO_H
-#define DUO_H
+#ifndef DUO_HPP
+#define DUO_HPP
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
@@ -135,4 +135,4 @@ namespace aea
 
 
 
-#endif  // DUO_H
+#endif  // DUO_HPP

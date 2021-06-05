@@ -18,10 +18,8 @@ namespace aea
             Pointer(Pointer<T>&& ptr);
             virtual ~Pointer() = default;
 
-
             Pointer<T>& operator=(const Pointer<T>& ptr);
             Pointer<T>& operator=(Pointer<T>&& ptr);
-
 
             template<typename Type> friend std::ostream& operator<<(std::ostream& os, const Pointer<Type>& obj);
 
@@ -126,4 +124,4 @@ namespace aea
 
 
 
-#endif  // POINTER_H
+#endif  // POINTER_HPP

@@ -1,5 +1,5 @@
-#ifndef TRIO_H
-#define TRIO_H
+#ifndef TRIO_HPP
+#define TRIO_HPP
 #include "Duo.hpp"
 
 
@@ -119,4 +119,4 @@ namespace aea
 
 
 
-#endif  // TRIO_H
+#endif  // TRIO_HPP

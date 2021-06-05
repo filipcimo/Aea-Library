@@ -2,6 +2,7 @@
 #define SENTENCE_HPP
 #include "BasicContainer.hpp"
 #include <math.h>
+#include <limits>
 
 
 
@@ -14,6 +15,7 @@ namespace aea
             sentence(char c);
             sentence(const char* str);
             sentence(const std::string& str);
+            sentence(const std::uint64_t& size, char c);
             sentence(const std::initializer_list<char>& list);
             sentence(const sentence& obj);
             sentence(sentence&& obj);
@@ -39,8 +41,11 @@ namespace aea
             void remove(const std::uint64_t& position);
             void toUpper();
             void toLower();
+            std::int64_t find(const char c, std::uint64_t* lastPosition = nullptr) const;
 		    bool contains(sentence str);
 		    bool contains(sentence str, const size_t& at);
+            void reverse();
+            void reverse(const std::uint64_t& from);
             long double toNumber();
             bool isNumber();
             bool isDouble();
@@ -82,6 +87,14 @@ namespace aea
         this->end = (this->begin + size - 1);
 
         strncpy(this->begin, str.data(), size);
+    }
+
+
+    sentence::sentence(const std::uint64_t& size, char c)
+    {
+        this->begin = new char[size];
+        this->end = (this->begin + size - 1);
+        memset(this->begin, c, size);
     }
 
 
@@ -310,7 +323,7 @@ namespace aea
             {
                 char* beginTemp = new char[inputBytes];
                 strncpy(beginTemp, this->begin, inputBytes);
-                delete [] begin;
+                delete [] this->begin;
 
                 this->begin = beginTemp;
                 this->end = (this->begin + inputBytes - 1);
@@ -357,7 +370,7 @@ namespace aea
             {
                 char* beginTemp = new char[inputBytes - 1];
                 strncpy(beginTemp, this->begin, inputBytes - 1);
-                delete [] begin;
+                delete [] this->begin;
 
                 this->begin = beginTemp;
                 this->end = (this->begin + inputBytes - 2);
@@ -479,6 +492,31 @@ namespace aea
     }
 
 
+    std::int64_t sentence::find(const char c, std::uint64_t* lastPosition) const
+    {
+        char* beginTemp = this->begin;
+        bool is = false;
+        const std::uint64_t size = this->size();
+        std::int64_t position = 0;
+
+        while (is == false || position == std::numeric_limits<std::int64_t>::max())
+        {
+            if (*beginTemp == c) { is = true; }
+            else 
+            {  
+                position += 1;
+                if (position == size) { break; }
+                beginTemp += 1;
+            }
+        }
+
+        if (lastPosition != nullptr && is == false && position == std::numeric_limits<std::int64_t>::max()) { *lastPosition = position; }
+        if (is == false) { position = -1; }
+
+        return position;
+    }
+
+
     bool sentence::contains(sentence str)
     {
         if (this->begin == nullptr || str.begin == nullptr) 
@@ -562,6 +600,42 @@ namespace aea
     }
 
 
+    void sentence::reverse()
+    {
+        if (this->begin != nullptr && this->end > this->begin)
+        {
+            std::uint64_t halfSize = this->size() / 2;
+            std::uint64_t i = 0;
+            char* beginTemp = this->begin;
+            char* endTemp = this->end;
+
+            while (i != halfSize)
+            {
+                char temp = *beginTemp;
+                *beginTemp = *endTemp;
+                *endTemp = temp;
+
+                beginTemp += 1;
+                endTemp -= 1;
+                i += 1;
+            }
+        }
+    }
+
+
+    void sentence::reverse(const std::uint64_t& from)
+    {
+        if (from > this->size())
+        {
+            throw std::out_of_range("Index out of range (Index: " + std::to_string(from) + ")");
+        }
+
+        this->begin += from;
+        reverse();
+        this->begin -= from;
+    }
+
+
     bool sentence::isNumber()
     {
         if (this->begin != nullptr)
@@ -614,7 +688,7 @@ namespace aea
                     {
                         if (isdigit(this->begin[k]) == 0) 
                         { 
-                            return false; 
+                            return false;
                         }
                     }
 
@@ -717,4 +791,4 @@ namespace aea
 
 
 
-#endif  // SENTENCE_H
+#endif  // SENTENCE_HPP

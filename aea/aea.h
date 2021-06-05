@@ -12,6 +12,7 @@
 #include "List.hpp"
 #include "Duo.hpp"
 #include "Trio.hpp"
+#include "Convert.hpp"
 
 
 #endif  // AEA_H

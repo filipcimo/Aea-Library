@@ -50,4 +50,4 @@ namespace aea
 
 
 
-#endif  // FUNCTIONS_H
+#endif  // FUNCTIONS_HPP
