@@ -37,7 +37,7 @@ namespace aea
             template<typename T> friend T& var_cast(var& obj);
             template<typename T, typename...Args> friend var make_var(Args&&...args);
 
-            friend std::ostream& operator<<(std::ostream& os, var& obj);
+            friend std::ostream& operator<<(std::ostream& os, const var& obj);
 
 
         private:
@@ -273,7 +273,7 @@ namespace aea
     }
 
 
-    std::ostream& operator<<(std::ostream& os, var& obj)
+    std::ostream& operator<<(std::ostream& os, const var& obj)
     {
         if (obj.dataObject->data == nullptr)
         {
