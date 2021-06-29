@@ -137,12 +137,28 @@ namespace aea
     template<typename T>
     void DArray<T>::resize(const std::uint64_t& size)
     {
-        this->reset();
+        if (size == 0) 
+        { 
+            this->reset(); 
+        }
 
-        if (size == 0) { return; }
+        else if (size == this->size())
+        {
+            return;
+        }
 
-        this->begin = new T[size];
-        this->end = (this->begin + size - 1);
+        else 
+        {
+            T* newData = new T[size];
+
+            if (size > this->size()) { aea::arrcpy(newData, this->begin, this->size()); }
+            else if (size < this->size()) { aea::arrcpy(newData, this->begin, size); }
+
+            this->reset();
+
+            this->begin = newData;
+            this->end = (this->begin + size - 1);
+        }
     }
 
 
