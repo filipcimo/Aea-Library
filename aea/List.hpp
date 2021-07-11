@@ -15,6 +15,7 @@ namespace aea
             List() = default;
             List(const List<T>& obj);
             List(List<T>&& obj);
+            explicit List(const std::uint64_t& size);
             List(const std::initializer_list<ListNode<T>>& list);
             virtual ~List();
 
@@ -32,7 +33,7 @@ namespace aea
             void remove();
             void remove(const std::uint64_t& position);
 
-            template<typename Type> friend std::ostream& operator<<(std::ostream& os, const List<Type>& obj);
+            //template<typename Type> friend std::ostream& operator<<(std::ostream& os, const List<Type>& obj);
 
         
         protected:
@@ -76,6 +77,21 @@ namespace aea
 
         obj.begin = nullptr;
         obj.end = nullptr;
+    }
+
+
+    template<typename T>
+    List<T>::List(const std::uint64_t& size)
+    {
+        ListNode<T>* nodes = new ListNode<T>[size];
+
+        for (std::uint64_t i = 1; i < size; ++i)
+        {
+            if (i != (size - 1)) { nodes[i].nextNode(&nodes[i + 1]); }
+        }
+
+        this->begin = nodes;
+        this->end = (this->begin + size - 1);
     }
 
 
@@ -338,23 +354,23 @@ namespace aea
     template<typename T>
     std::ostream& List<T>::print(std::ostream& os) const
     {
-        ListNode<T>* temp = (ListNode<T>*) this->begin;
+        /*ListNode<T>* temp = (ListNode<T>*) this->begin;
 
         while (temp != nullptr)
         {
             os << *temp->dataNode() << ' ';
             temp = temp->nextNode();
-        }
+        }*/
 
         return os;
     }
 
 
-    template<typename Type>
+    /*template<typename Type>
     std::ostream& operator<<(std::ostream& os, const List<Type>& obj)
     {
         return obj.print(os);
-    }
+    }*/
 
 
     template<typename Type> 
