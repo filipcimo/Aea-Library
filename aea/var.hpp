@@ -37,8 +37,6 @@ namespace aea
             template<typename T> friend T& var_cast(var& obj);
             template<typename T, typename...Args> friend var make_var(Args&&...args);
 
-            friend std::ostream& operator<<(std::ostream& os, const var& obj);
-
 
         private:
             struct Attributes
@@ -270,39 +268,6 @@ namespace aea
     bool var::isData() const
     {
         return (dataObject->data != nullptr);
-    }
-
-
-    std::ostream& operator<<(std::ostream& os, const var& obj)
-    {
-        if (obj.dataObject->data == nullptr)
-        {
-            os << '0';
-        }
-
-        else if (obj.dataObject->data != nullptr)
-        {
-            const char* type = obj.dataObject->dataType.name();
-
-            if (strcmp(type, typeid(int).name()) == 0) { os << *static_cast<int*>(obj.dataObject->data); }
-            else if (strcmp(type, typeid(unsigned int).name()) == 0) { os << *static_cast<unsigned int*>(obj.dataObject->data); }
-            else if (strcmp(type, typeid(short int).name()) == 0) { os << *static_cast<short int*>(obj.dataObject->data); }
-            else if (strcmp(type, typeid(unsigned short int).name()) == 0) { os << *static_cast<unsigned short int*>(obj.dataObject->data); }
-            else if (strcmp(type, typeid(long int).name()) == 0) { os << *static_cast<long int*>(obj.dataObject->data); }
-            else if (strcmp(type, typeid(unsigned long int).name()) == 0) { os << *static_cast<unsigned long int*>(obj.dataObject->data); }
-            else if (strcmp(type, typeid(long long int).name()) == 0) { os << *static_cast<long long int*>(obj.dataObject->data); }
-            else if (strcmp(type, typeid(unsigned long long int).name()) == 0) { os << *static_cast<unsigned long long int*>(obj.dataObject->data); }
-            else if (strcmp(type, typeid(size_t).name()) == 0) { os << *static_cast<size_t*>(obj.dataObject->data); }
-            else if (strcmp(type, typeid(float).name()) == 0) { os << *static_cast<float*>(obj.dataObject->data); }
-            else if (strcmp(type, typeid(double).name()) == 0) { os << *static_cast<double*>(obj.dataObject->data); }
-            else if (strcmp(type, typeid(long double).name()) == 0) { os << *static_cast<long double*>(obj.dataObject->data); }
-            else if (strcmp(type, typeid(bool).name()) == 0) { os << *static_cast<bool*>(obj.dataObject->data); }
-            else if (strcmp(type, typeid(char).name()) == 0) { os << *static_cast<char*>(obj.dataObject->data); }
-            else if (strcmp(type, typeid(aea::sentence).name()) == 0) { os << *static_cast<aea::sentence*>(obj.dataObject->data); }
-            else { os << obj.dataObject->data; }
-        }
-
-        return os;
     }
 }
 

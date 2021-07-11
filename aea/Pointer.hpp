@@ -22,8 +22,6 @@ namespace aea
             Pointer<T>& operator=(const Pointer<T>& ptr);
             Pointer<T>& operator=(Pointer<T>&& ptr);
 
-            template<typename Type> friend std::ostream& operator<<(std::ostream& os, const Pointer<Type>& obj);
-
 
         protected:
             virtual std::ostream& print(std::ostream& os) const;
@@ -101,25 +99,10 @@ namespace aea
     }
 
 
-
     template<typename T>
     std::ostream& Pointer<T>::print(std::ostream& os) const
     {
-        os.flush();
-
-        for (std::uint64_t i = 0; i < this->size(); ++i)
-        {
-            os << this->begin[i] << ' ';
-        }
-
         return os;
-    }
-
-
-    template<typename Type>
-    std::ostream& operator<<(std::ostream& os, const Pointer<Type>& obj)
-    {
-        return obj.print(os);
     }
 }
 

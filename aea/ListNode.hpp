@@ -28,8 +28,6 @@ namespace aea
             ListNode<T>* nextNode() const;
             void nextNode(ListNode<T>* ptr);
 
-            //template<typename Type> friend std::ostream& operator<<(std::ostream& os, const ListNode<Type>& obj);
-
 
         protected:
             T* data = nullptr;
@@ -147,18 +145,6 @@ namespace aea
     {
         next = ptr;
     }
-
-
-    /*template<typename Type>
-    std::ostream& operator<<(std::ostream& os, const ListNode<Type>& obj)
-    {
-        if (obj.data != nullptr)
-        {
-            os << *obj.data;
-        }
-        
-        return os;
-    }*/
 }
 
 

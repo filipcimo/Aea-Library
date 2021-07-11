@@ -29,7 +29,6 @@ namespace aea
             void insert(const std::uint64_t& position, const T& item);
             void remove(const std::uint64_t& position);
             void resize(const std::uint64_t& size);
-            template<typename Type> friend std::ostream& operator<<(std::ostream& os, const DArray<Type>& obj);
 
 
         protected:
@@ -117,21 +116,7 @@ namespace aea
     template<typename T>
     std::ostream& DArray<T>::print(std::ostream& os) const
     {
-        os.flush();
-
-        for (std::uint64_t i = 0; i < this->size(); ++i)
-        {
-            os << this->begin[i] << ' ';
-        }
-
         return os;
-    }
-
-
-    template<typename Type>
-    std::ostream& operator<<(std::ostream& os, const DArray<Type>& obj)
-    {
-        return obj.print(os);
     }
 
 

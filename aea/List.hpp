@@ -33,8 +33,6 @@ namespace aea
             void remove();
             void remove(const std::uint64_t& position);
 
-            //template<typename Type> friend std::ostream& operator<<(std::ostream& os, const List<Type>& obj);
-
         
         protected:
             virtual std::ostream& print(std::ostream& os) const;
@@ -354,23 +352,8 @@ namespace aea
     template<typename T>
     std::ostream& List<T>::print(std::ostream& os) const
     {
-        /*ListNode<T>* temp = (ListNode<T>*) this->begin;
-
-        while (temp != nullptr)
-        {
-            os << *temp->dataNode() << ' ';
-            temp = temp->nextNode();
-        }*/
-
         return os;
     }
-
-
-    /*template<typename Type>
-    std::ostream& operator<<(std::ostream& os, const List<Type>& obj)
-    {
-        return obj.print(os);
-    }*/
 
 
     template<typename Type> 

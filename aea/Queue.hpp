@@ -35,8 +35,6 @@ namespace aea
             void remove();
             void remove(const std::uint64_t& position);
 
-            //template<typename Type> friend std::ostream& operator<<(std::ostream& os, const Queue<Type>& obj);
-
 
         private:
             aea::List<T> data;
@@ -189,26 +187,6 @@ namespace aea
     {
         data.remove(position);
     }
-
-
-    /*template<typename Type> 
-    std::ostream& operator<<(std::ostream& os, const Queue<Type>& obj)
-    {
-        if (obj.size() != 0)
-        {
-            for (std::uint64_t i = 0; i < obj.size(); ++i)
-            {
-                os << obj.at(i) << ' ';
-            }
-        }
-
-        else
-        {
-            os << '\0';
-        }
-
-        return os;
-    }*/
 }
 
 
