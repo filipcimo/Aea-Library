@@ -1,5 +1,6 @@
 #ifndef TRIO_HPP
 #define TRIO_HPP
+
 #include "Duo.hpp"
 
 

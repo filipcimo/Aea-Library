@@ -1,5 +1,6 @@
 #ifndef FUNCTIONS_HPP
 #define FUNCTIONS_HPP
+
 #include <iostream>
 #include <stdlib.h>
 #include <stdio.h>

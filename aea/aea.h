@@ -10,6 +10,7 @@
 #include "Functions.hpp"
 #include "ListNode.hpp"
 #include "List.hpp"
+#include "Queue.hpp"
 #include "Duo.hpp"
 #include "Trio.hpp"
 #include "Convert.hpp"

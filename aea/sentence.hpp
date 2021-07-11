@@ -1,5 +1,6 @@
 #ifndef SENTENCE_HPP
 #define SENTENCE_HPP
+
 #include "BasicContainer.hpp"
 #include <math.h>
 #include <limits>

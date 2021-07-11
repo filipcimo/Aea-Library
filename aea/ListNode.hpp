@@ -1,5 +1,6 @@
 #ifndef LISTNODE_HPP
 #define LISTNODE_HPP
+
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>

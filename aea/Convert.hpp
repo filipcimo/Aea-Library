@@ -1,5 +1,6 @@
 #ifndef CONVERT_HPP
 #define CONVERT_HPP
+
 #include "sentence.hpp"
 #include <cinttypes>
 

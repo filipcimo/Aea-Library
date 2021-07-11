@@ -1,5 +1,6 @@
 #ifndef DUO_HPP
 #define DUO_HPP
+
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>

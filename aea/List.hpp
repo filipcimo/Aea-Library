@@ -1,5 +1,6 @@
 #ifndef LIST_HPP
 #define LIST_HPP
+
 #include "BasicContainer.hpp"
 #include "ListNode.hpp"
 
@@ -19,8 +20,10 @@ namespace aea
 
             List<T>& operator=(const List<T>& obj);
             List<T>& operator=(List<T>&& obj);
+            List<T>& operator=(const std::initializer_list<ListNode<T>>& list);
 
             virtual void reset();
+            virtual ListNode<T>* get() const;
             virtual ListNode<T>& at(const std::uint64_t& position) const;
             virtual ListNode<T>& operator[](const std::uint64_t& position) const;
             virtual std::uint64_t size() const;
@@ -79,9 +82,9 @@ namespace aea
     template<typename T>
     List<T>::List(const std::initializer_list<ListNode<T>>& list)
     {
-        for (std::uint64_t i = 0; i < list.size(); ++i)
+        for (const ListNode<T>& node : list)
         {
-            this->add(*(list.begin() + i));
+            this->add(node);
         }
     }
 
@@ -119,6 +122,20 @@ namespace aea
 
 
     template<typename T>
+    List<T>& List<T>::operator=(const std::initializer_list<ListNode<T>>& list)
+    {
+        this->reset();
+
+        for (const ListNode<T>& node : list)
+        {
+            this->add(node);
+        }
+
+        return *this;
+    }
+
+
+    template<typename T>
     void List<T>::reset()
     {
         ListNode<T>* temp = this->begin;
@@ -147,6 +164,13 @@ namespace aea
         }
 
         return i;
+    }
+
+
+    template<typename T>
+    ListNode<T>* List<T>::get() const
+    {
+        return this->begin;
     }
 
 

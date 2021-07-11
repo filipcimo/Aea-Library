@@ -1,5 +1,6 @@
 #ifndef POINTER_HPP
 #define POINTER_HPP
+
 #include "BasicContainer.hpp"
 
 
