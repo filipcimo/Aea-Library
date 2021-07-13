@@ -26,7 +26,7 @@ namespace aea
 
     
     template<typename FType, typename SType>
-    void arrcpy(FType* it, const SType* it2, const std::uint64_t& sz)
+    void arrcopy(FType* it, const SType* it2, const std::uint64_t& sz)
     {
         if (sizeof(FType) == sizeof(SType) && std::is_trivial<FType>::value == true && std::is_trivial<SType>::value == true)
         {
@@ -45,6 +45,22 @@ namespace aea
                 accesser1 += 1;
                 accesser2 += 1;
             }
+        }
+    }
+
+
+    template<typename Type>
+    void arrmove(Type* it, const Type* it2, const std::uint64_t& sz)
+    {
+        Type* accesser1 = (Type*) it;
+        Type* accesser2 = (Type*) it2;
+
+        for (std::uint64_t i = 0; i < sz; ++i)
+        {
+            *accesser1 = std::move(*accesser2);
+
+            accesser1 += 1;
+            accesser2 += 1;
         }
     }
 }

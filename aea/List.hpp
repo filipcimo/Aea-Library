@@ -29,7 +29,9 @@ namespace aea
             virtual ListNode<T>& operator[](const std::uint64_t& position) const;
             virtual std::uint64_t size() const;
             void add(const ListNode<T>& item);
+            void add(ListNode<T>&& item);
             void add(const std::uint64_t& position, const ListNode<T>& item);
+            void add(const std::uint64_t& position, ListNode<T>&& item);
             void remove();
             void remove(const std::uint64_t& position);
 
@@ -81,15 +83,10 @@ namespace aea
     template<typename T>
     List<T>::List(const std::uint64_t& size)
     {
-        ListNode<T>* nodes = new ListNode<T>[size];
-
-        for (std::uint64_t i = 1; i < size; ++i)
+        for (std::uint64_t i = 0; i < size; ++i)
         {
-            if (i != (size - 1)) { nodes[i].nextNode(&nodes[i + 1]); }
+            this->add(std::move(ListNode<T>()));
         }
-
-        this->begin = nodes;
-        this->end = (this->begin + size - 1);
     }
 
 
@@ -248,6 +245,25 @@ namespace aea
 
 
     template<typename T>
+    void List<T>::add(ListNode<T>&& item)
+    {
+        ListNode<T>* node = new ListNode<T>(std::move(item));
+
+        if (this->begin == nullptr)
+        {
+            this->begin = node;
+            this->end = this->begin;
+        }
+
+        else
+        {
+            this->end->nextNode(node);
+            this->end = node;
+        }
+    }
+
+
+    template<typename T>
     void List<T>::add(const std::uint64_t& position, const ListNode<T>& item)
     {
         if (position > this->size() && position != 0)
@@ -257,6 +273,39 @@ namespace aea
 
 
         ListNode<T>* node = new ListNode<T>(item);
+
+        if (position == 0)
+        {
+            this->begin = node;
+            this->end = this->begin;
+        }
+
+        else if (position > 0)
+        {
+            ListNode<T>* temp = this->begin;
+
+            for (std::uint64_t i = 0; i < (position - 1); ++i)
+            {
+                temp = temp->nextNode();
+            }
+
+            ListNode<T>* nextTemp = temp->nextNode(); 
+            temp->nextNode(node);
+            temp->nextNode()->nextNode(nextTemp);
+        }
+    }
+
+
+    template<typename T>
+    void List<T>::add(const std::uint64_t& position, ListNode<T>&& item)
+    {
+        if (position > this->size() && position != 0)
+        {
+            throw std::out_of_range("Index out of range (Index: " + std::to_string(position) + ")");
+        }
+
+
+        ListNode<T>* node = new ListNode<T>(std::move(item));
 
         if (position == 0)
         {

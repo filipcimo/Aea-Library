@@ -232,14 +232,14 @@ namespace aea
         if (dotPosition == -1) { return float(to_int32(str)); }
 
         aea::sentence temp(dotPosition, ' ');
-        aea::arrcpy(temp.get(), str.get(), dotPosition);
+        aea::arrcopy(temp.get(), str.get(), dotPosition);
 
         float result = 0;
         result = to_int32(temp);
 
         temp.reset();
         temp = std::move(aea::sentence((str.size() - dotPosition - 1), ' '));
-        aea::arrcpy(temp.get(), (str.first() + dotPosition + 1), (str.size() - dotPosition - 1));
+        aea::arrcopy(temp.get(), (str.first() + dotPosition + 1), (str.size() - dotPosition - 1));
 
         if (str.at(0) == '-') { result -= float(float(to_int32(temp)) / float(pow(10, (str.size() - dotPosition - 1)))); }
         else if (str.at(0) != '-') { result += float(float(to_int32(temp)) / float(pow(10, (str.size() - dotPosition - 1)))); }
@@ -259,14 +259,14 @@ namespace aea
         if (dotPosition == -1) { return double(to_int64(str)); }
 
         aea::sentence temp(dotPosition, ' ');
-        aea::arrcpy(temp.get(), str.get(), dotPosition);
+        aea::arrcopy(temp.get(), str.get(), dotPosition);
 
         double result = 0;
         result = to_int64(temp);
 
         temp.reset();
         temp = std::move(aea::sentence((str.size() - dotPosition - 1), ' '));
-        aea::arrcpy(temp.get(), (str.first() + dotPosition + 1), (str.size() - dotPosition - 1));
+        aea::arrcopy(temp.get(), (str.first() + dotPosition + 1), (str.size() - dotPosition - 1));
 
         if (str.at(0) == '-') { result -= double(double(to_int64(temp)) / double(pow(10, (str.size() - dotPosition - 1)))); }
         else if (str.at(0) != '-') { result += double(double(to_int64(temp)) / double(pow(10, (str.size() - dotPosition - 1)))); }

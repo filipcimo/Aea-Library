@@ -124,7 +124,7 @@ namespace aea
             begin = new T[size];
             end = (begin + size - 1);
 
-            aea::arrcpy(begin, obj.begin, size);
+            aea::arrcopy(begin, obj.begin, size);
         }
 
         return *this;

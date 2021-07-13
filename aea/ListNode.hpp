@@ -15,11 +15,13 @@ namespace aea
         public:
             ListNode() = default;
             ListNode(const T& item);
+            ListNode(T&& item);
             ListNode(const ListNode<T>& obj);
             ListNode(ListNode<T>&& obj);
             ~ListNode();
 
             ListNode<T>& operator=(const T& item);
+            ListNode<T>& operator=(T&& item);
             ListNode<T>& operator=(const ListNode<T>& obj);
             ListNode<T>& operator=(ListNode<T>&& obj);
 
@@ -54,6 +56,13 @@ namespace aea
 
 
     template<typename T>
+    ListNode<T>::ListNode(T&& item)
+    {
+        data = new T(std::move(item));
+    }
+
+
+    template<typename T>
     ListNode<T>::ListNode(const ListNode<T>& obj)
     {
         data = new T(*obj.data);
@@ -75,7 +84,19 @@ namespace aea
     template<typename T>
     ListNode<T>& ListNode<T>::operator=(const T& item)
     {
+        if (data == nullptr) { data = new T(); }
+
         *data = item;
+        return *this;
+    }
+
+
+    template<typename T>
+    ListNode<T>& ListNode<T>::operator=(T&& item)
+    {
+        if (data == nullptr) { data = new T(); }
+
+        *data = std::move(item);
         return *this;
     }
 
@@ -85,7 +106,7 @@ namespace aea
     {
         if (data == nullptr)
         {
-            data = new T;
+            data = new T();
         }
 
         if (next == nullptr)

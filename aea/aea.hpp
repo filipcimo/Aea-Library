@@ -14,6 +14,7 @@
 #include "Duo.hpp"
 #include "Trio.hpp"
 #include "Convert.hpp"
+#include "ThreadPool.hpp"
 
 
 #endif  // AEA_HPP

@@ -23,10 +23,13 @@ namespace aea
             DArray<T>& operator=(DArray<T>&& obj);
 
             void pushback(const T& item);
+            void pushback(T&& item);
             void popback();
             void pushfront(const T& item);
+            void pushfront(T&& item);
             void popfront();
             void insert(const std::uint64_t& position, const T& item);
+            void insert(const std::uint64_t& position, T&& item);
             void remove(const std::uint64_t& position);
             void resize(const std::uint64_t& size);
 
@@ -74,7 +77,7 @@ namespace aea
             this->begin = new T[size];
             this->end = (this->begin + size - 1);
 
-            aea::arrcpy(this->begin, ptr, size);
+            aea::arrcopy(this->begin, ptr, size);
         }
     }
 
@@ -91,7 +94,7 @@ namespace aea
             this->begin = new T[size];
             this->end = (this->begin + size - 1);
 
-            aea::arrcpy(this->begin, obj.begin, size);
+            aea::arrcopy(this->begin, obj.begin, size);
         }
 
         return *this;
@@ -137,8 +140,8 @@ namespace aea
         {
             T* newData = new T[size];
 
-            if (size > this->size()) { aea::arrcpy(newData, this->begin, this->size()); }
-            else if (size < this->size()) { aea::arrcpy(newData, this->begin, size); }
+            if (size > this->size()) { aea::arrmove(newData, this->begin, this->size()); }
+            else if (size < this->size()) { aea::arrmove(newData, this->begin, size); }
 
             this->reset();
 
@@ -154,11 +157,28 @@ namespace aea
         const std::uint64_t size = this->size() + 1;
 
         T* data = new T[size];
-        aea::arrcpy(data, this->begin, (size - 1));
+        aea::arrmove(data, this->begin, (size - 1));
 
         this->reset();
 
         data[size - 1] = item;
+
+        this->begin = data;
+        this->end = (this->begin + size - 1);
+    }
+
+
+    template<typename T>
+    void DArray<T>::pushback(T&& item)
+    {
+        const std::uint64_t size = this->size() + 1;
+
+        T* data = new T[size];
+        aea::arrmove(data, this->begin, (size - 1));
+
+        this->reset();
+
+        data[size - 1] = std::move(item);
 
         this->begin = data;
         this->end = (this->begin + size - 1);
@@ -171,7 +191,7 @@ namespace aea
         const std::uint64_t size = this->size() - 1;
 
         T* data = new T[size];
-        aea::arrcpy(data, this->begin, size);
+        aea::arrmove(data, this->begin, size);
 
         this->reset();
 
@@ -186,11 +206,28 @@ namespace aea
         const std::uint64_t size = this->size() + 1;
 
         T* data = new T[size];
-        aea::arrcpy((data + 1), this->begin, (size - 1));
+        aea::arrmove((data + 1), this->begin, (size - 1));
 
         this->reset();
 
         data[0] = item;
+
+        this->begin = data;
+        this->end = (this->begin + size - 1);
+    }
+
+
+    template<typename T>
+    void DArray<T>::pushfront(T&& item)
+    {
+        const std::uint64_t size = this->size() + 1;
+
+        T* data = new T[size];
+        aea::arrmove((data + 1), this->begin, (size - 1));
+
+        this->reset();
+
+        data[0] = std::move(item);
 
         this->begin = data;
         this->end = (this->begin + size - 1);
@@ -203,7 +240,7 @@ namespace aea
         const std::uint64_t size = this->size() - 1;
 
         T* data = new T[size];
-        aea::arrcpy(data, (this->begin + 1), size);
+        aea::arrmove(data, (this->begin + 1), size);
 
         this->reset();
 
@@ -227,18 +264,51 @@ namespace aea
         {
             if (i < position)
             {
-                data[i] = this->begin[i];
+                data[i] = std::move(this->begin[i]);
             }
 
             else if(i > position)
             {
-                data[i] = this->begin[i - 1];
+                data[i] = std::move(this->begin[i - 1]);
             }
         }
 
         this->reset();
 
         data[position] = item;
+
+        this->begin = data;
+        this->end = (this->begin + size - 1);
+    }
+
+
+    template<typename T>
+    void DArray<T>::insert(const std::uint64_t& position, T&& item)
+    {
+        if (this->begin == nullptr || position >= this->size())
+        {
+            throw std::out_of_range("Index out of range (Index: " + std::to_string(position) + ")");
+        }
+
+        const std::uint64_t size = this->size() + 1;
+        T* data = new T[size];
+
+        for (std::uint64_t i = 0; i < size; ++i)
+        {
+            if (i < position)
+            {
+                data[i] = std::move(this->begin[i]);
+            }
+
+            else if(i > position)
+            {
+                data[i] = std::move(this->begin[i - 1]);
+            }
+        }
+
+        this->reset();
+
+        data[position] = std::move(item);
 
         this->begin = data;
         this->end = (this->begin + size - 1);
@@ -260,12 +330,12 @@ namespace aea
         {
             if (i < position)
             {
-                data[i] = this->begin[i];
+                data[i] = std::move(this->begin[i]);
             }
 
             else if(i > position)
             {
-                data[i - 1] = this->begin[i];
+                data[i - 1] = std::move(this->begin[i]);
             }
         }
 
