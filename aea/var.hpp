@@ -18,11 +18,13 @@ namespace aea
         public:
             var() = default;
             template<typename T> var(const T& obj);
+            template<typename T> var(T&& obj);
             var(const var& obj);
             var(var&& obj);
             ~var();
 
             template<typename T> var& operator=(const T& obj);
+            template<typename T> var& operator=(T&& obj);
             var& operator=(const var& obj);
             var& operator=(var&& obj);
             
@@ -54,6 +56,15 @@ namespace aea
     var::var(const T& obj)
     {   
         dataObject->data = new T(obj);
+        dataObject->dataType = typeid(T);
+        dataObject->isTrivial = std::is_trivial<T>::value;
+    }
+
+
+    template<typename T>
+    var::var(T&& obj)
+    {   
+        dataObject->data = new T(std::move(obj));
         dataObject->dataType = typeid(T);
         dataObject->isTrivial = std::is_trivial<T>::value;
     }
@@ -132,6 +143,19 @@ namespace aea
         reset();
 
         dataObject->data = new T(obj);
+        dataObject->dataType = typeid(T);
+        dataObject->isTrivial = std::is_trivial<T>::value;
+
+        return *this;
+    }
+
+
+    template<typename T>
+    var& var::operator=(T&& obj)
+    {   
+        reset();
+
+        dataObject->data = new T(std::move(obj));
         dataObject->dataType = typeid(T);
         dataObject->isTrivial = std::is_trivial<T>::value;
 

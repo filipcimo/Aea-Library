@@ -15,6 +15,7 @@ namespace aea
         public:
             Duo() = default;
             Duo(const T& item, const T2& item2);
+            Duo(T&& item, T2&& item2);
             Duo(const Duo<T, T2>& obj);
             Duo(Duo<T, T2>&& obj);
             virtual ~Duo();
@@ -39,6 +40,14 @@ namespace aea
     {
         one = new T(item);
         two = new T2(item2);
+    }
+
+
+    template<typename T, typename T2>
+    Duo<T, T2>::Duo(T&& item, T2&& item2)
+    {
+        one = new T(std::move(item));
+        two = new T2(std::move(item2));
     }
 
 

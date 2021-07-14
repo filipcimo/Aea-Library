@@ -13,6 +13,7 @@ namespace aea
         public:
             Trio() = default;
             Trio(const T& item, const T2& item2, const T3& item3);
+            Trio(T&& item, T2&& item2, T3&& item3);
             Trio(const Trio<T, T2, T3>& obj);
             Trio(Trio<T, T2, T3>&& obj);
             virtual ~Trio();
@@ -34,6 +35,13 @@ namespace aea
     Trio<T, T2, T3>::Trio(const T& item, const T2& item2, const T3& item3) : Duo<T, T2>(item, item2)
     {
         three = new T3(item3);
+    }
+
+
+    template<typename T, typename T2, typename T3>
+    Trio<T, T2, T3>::Trio(T&& item, T2&& item2, T3&& item3) : Duo<T, T2>(std::move(item), std::move(item2))
+    {
+        three = new T3(std::move(item3));
     }
 
 

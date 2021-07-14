@@ -45,15 +45,59 @@ namespace aea
     sentence Convert::to_sentence(std::int64_t number)
     {
         sentence result;
-        bool minus = false;
 
-        if (number < 0) 
+        if (number == 0) 
         { 
-            result = '-';
-            minus = true; 
+            result = number + '0'; 
         }
 
-        if (minus == false)
+        else
+        {
+            bool minus = false;
+
+            if (number < 0) 
+            { 
+                result = '-';
+                minus = true; 
+            }
+
+            if (minus == false)
+            {
+                while (number >= 1)
+                {
+                    result += (number % 10) + '0';
+                    number /= 10;
+                }
+
+                result.reverse();
+            }
+
+            else if (minus == true)
+            {
+                while (number < 0)
+                {
+                    result += ((number * -1) % 10) + '0';
+                    number /= 10;
+                }
+
+                result.reverse(1);
+            }
+        }
+
+        return result;
+    }
+
+
+    sentence Convert::to_sentence(std::uint64_t number)
+    {
+        sentence result;
+
+        if (number == 0) 
+        { 
+            result = number + '0'; 
+        }
+
+        else
         {
             while (number >= 1)
             {
@@ -64,51 +108,36 @@ namespace aea
             result.reverse();
         }
 
-        else if (minus == true)
-        {
-            while (number < 0)
-            {
-                result += ((number * -1) % 10) + '0';
-                number /= 10;
-            }
-
-            result.reverse(1);
-        }
-
-        return result;
-    }
-
-
-    sentence Convert::to_sentence(std::uint64_t number)
-    {
-        sentence result;
-        while (number >= 1)
-        {
-            result += (number % 10) + '0';
-            number /= 10;
-        }
-
-        result.reverse();
         return result;
     }
 
 
     sentence Convert::to_sentence(float number)
     {
-        bool minus = false;
-        if (number < 0) { minus = true; }
+        aea::sentence result;
 
-        aea::sentence result = std::move(to_sentence(std::int64_t(number)));
+        if (number == float(0))
+        {
+            result = number + '0'; 
+        }
 
-        if (minus == false) { number -= std::int32_t(number); }
-        else if (minus == true) { number += std::int32_t(number) * -1; }
+        else 
+        {
+            bool minus = false;
+            if (number < 0) { minus = true; }
 
-        std::int64_t fltNumbers = float(number * float(pow(10, __FLT_DIG__)));
-        result += '.';
+            result = std::move(to_sentence(std::int64_t(number)));
 
-        aea::sentence temp = std::move(to_sentence(fltNumbers));
-        if (minus == true) { temp.remove(0); }
-        result += temp;
+            if (minus == false) { number -= std::int32_t(number); }
+            else if (minus == true) { number += std::int32_t(number) * -1; }
+
+            std::int64_t fltNumbers = float(number * float(pow(10, __FLT_DIG__)));
+            result += '.';
+
+            aea::sentence temp = std::move(to_sentence(fltNumbers));
+            if (minus == true) { temp.remove(0); }
+            result += temp;
+        }
 
         return result;
     }
@@ -116,20 +145,30 @@ namespace aea
 
     sentence Convert::to_sentence(double number)
     {
-        bool minus = false;
-        if (number < 0) { minus = true; }
+        aea::sentence result;
 
-        aea::sentence result = std::move(to_sentence(std::int64_t(number)));
+        if (number == double(0))
+        {
+            result = number + '0'; 
+        }
 
-        if (minus == false) { number -= std::int64_t(number); }
-        else if (minus == true) { number += std::int64_t(number) * -1; }
+        else 
+        {
+            bool minus = false;
+            if (number < 0) { minus = true; }
 
-        std::int64_t fltNumbers = double(number * double(pow(10, __DBL_DIG__)));
-        result += '.';
+            result = std::move(to_sentence(std::int64_t(number)));
 
-        aea::sentence temp = std::move(to_sentence(fltNumbers));
-        if (minus == true) { temp.remove(0); }
-        result += temp;
+            if (minus == false) { number -= std::int64_t(number); }
+            else if (minus == true) { number += std::int64_t(number) * -1; }
+
+            std::int64_t fltNumbers = double(number * double(pow(10, __DBL_DIG__)));
+            result += '.';
+
+            aea::sentence temp = std::move(to_sentence(fltNumbers));
+            if (minus == true) { temp.remove(0); }
+            result += temp;
+        }
 
         return result;
     }
