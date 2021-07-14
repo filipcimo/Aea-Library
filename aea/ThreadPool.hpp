@@ -42,8 +42,6 @@ namespace aea
 
     ThreadPool::ThreadPool(const std::uint32_t& size)
     {
-        if (size > std::thread::hardware_concurrency()) { throw std::runtime_error("Too many threads (Threads: " + std::to_string(size) + ")"); }
-
         threads = std::move(aea::Pointer<std::thread>(new std::thread[size], size));
         functionsToExecute = std::move(aea::Pointer<std::function<void()>>(new std::function<void()>[size], size));
         threadsToExecute = std::move(aea::Pointer<bool>(new bool[size], size));
