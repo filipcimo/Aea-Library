@@ -57,12 +57,19 @@ namespace aea
     {
         const std::uint64_t size = list.size();
 
-        begin = new T[size];
-        end = (begin + size - 1);
-
-        for (std::uint64_t i = 0; i < size; ++i)
+        if (size > 0)
         {
-            begin[i] = *(list.begin() + i);
+            if (size == 1) { begin = new T; }
+            else if (size > 1) { begin = new T[size]; }
+
+            end = (begin + size - 1);
+
+            T* beginTemp = begin;
+            for (const T& item : list)
+            {
+                *beginTemp = item;
+                beginTemp += 1;
+            }
         }
     }
 
@@ -72,12 +79,16 @@ namespace aea
     {
         const std::uint64_t size = obj.size();
 
-        begin = new T[size];
-        end = (begin + size - 1);
-
-        for (std::uint64_t i = 0; i < size; ++i)
+        if (size > 0)
         {
-            begin[i] = obj.begin[i];
+            if (size == 1) { begin = new T; }
+            else if (size > 1) { begin = new T[size]; }
+            end = (begin + size - 1);
+
+            for (std::uint64_t i = 0; i < size; ++i)
+            {
+                begin[i] = obj.begin[i];
+            }
         }
     }
 
@@ -97,17 +108,14 @@ namespace aea
     template<typename T>
     BasicContainer<T>::~BasicContainer()
     {
-        if (begin != nullptr)
+        if (size() == 1)
         {
-            if (size() == 1)
-            {
-                delete begin;
-            }
+            delete begin;
+        }
 
-            else if (size() > 1)
-            {
-                delete [] begin;
-            }
+        else if (size() > 1)
+        {
+            delete [] begin;
         }
     }
 
@@ -121,10 +129,14 @@ namespace aea
 
             const std::uint64_t size = obj.size();
 
-            begin = new T[size];
-            end = (begin + size - 1);
+            if (size > 0)
+            {
+                if (size == 1) { begin = new T; }
+                else if (size > 1) { begin = new T[size]; }
+                end = (begin + size - 1);
 
-            aea::arrcopy(begin, obj.begin, size);
+                aea::arrcopy(begin, obj.begin, size);
+            }
         }
 
         return *this;

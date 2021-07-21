@@ -42,9 +42,14 @@ namespace aea
 
     template<typename T>
     DArray<T>::DArray(const std::uint64_t& size)
-    {
-        this->begin = new T[size];
-        this->end = (this->begin + size - 1);
+    {   
+        if (size > 0)
+        {
+            if (size == 1) { this->begin = new T; }
+            else if (size > 1) { this->begin = new T[size]; }
+
+            this->end = (this->begin + size - 1);
+        }
     }
 
 
@@ -74,7 +79,8 @@ namespace aea
     {
         if (ptr != nullptr && size > 0)
         {
-            this->begin = new T[size];
+            if (size == 1) { this->begin = new T; }
+            else if (size > 1) { this->begin = new T[size]; }
             this->end = (this->begin + size - 1);
 
             aea::arrcopy(this->begin, ptr, size);
@@ -91,10 +97,14 @@ namespace aea
 
             const std::uint64_t size = obj.size();
 
-            this->begin = new T[size];
-            this->end = (this->begin + size - 1);
+            if (size > 0)
+            {
+                if (size == 1) { this->begin = new T; }
+                else if (size > 1) { this->begin = new T[size]; }
+                this->end = (this->begin + size - 1);
 
-            aea::arrcopy(this->begin, obj.begin, size);
+                aea::arrcopy(this->begin, obj.begin, size);
+            }
         }
 
         return *this;
@@ -128,7 +138,7 @@ namespace aea
     {
         if (size == 0) 
         { 
-            this->reset(); 
+            this->reset();
         }
 
         else if (size == this->size())
@@ -138,7 +148,10 @@ namespace aea
 
         else 
         {
-            T* newData = new T[size];
+            T* newData = nullptr;
+
+            if (size == 1) { newData = new T; }
+            else if (size > 1) { newData = new T[size]; }
 
             if (size > this->size()) { aea::arrmove(newData, this->begin, this->size()); }
             else if (size < this->size()) { aea::arrmove(newData, this->begin, size); }
@@ -155,10 +168,12 @@ namespace aea
     void DArray<T>::pushback(const T& item)
     {
         const std::uint64_t size = this->size() + 1;
+        T* data = nullptr;
 
-        T* data = new T[size];
+        if (size == 1) { data = new T; }
+        else if (size > 1) { data = new T[size]; }
+
         aea::arrmove(data, this->begin, (size - 1));
-
         this->reset();
 
         data[size - 1] = item;
@@ -172,10 +187,12 @@ namespace aea
     void DArray<T>::pushback(T&& item)
     {
         const std::uint64_t size = this->size() + 1;
+        T* data = nullptr;
 
-        T* data = new T[size];
+        if (size == 1) { data = new T; }
+        else if (size > 1) { data = new T[size]; }
+
         aea::arrmove(data, this->begin, (size - 1));
-
         this->reset();
 
         data[size - 1] = std::move(item);
@@ -188,15 +205,23 @@ namespace aea
     template<typename T>
     void DArray<T>::popback()
     {
-        const std::uint64_t size = this->size() - 1;
+        if (this->begin != nullptr)
+        {
+            const std::uint64_t size = this->size() - 1;
+            T* data = nullptr;
 
-        T* data = new T[size];
-        aea::arrmove(data, this->begin, size);
+            if (size == 1) { data = new T; }
+            else if (size > 1) { data = new T[size]; }
 
-        this->reset();
+            aea::arrmove(data, this->begin, size);
+            this->reset();
 
-        this->begin = data;
-        this->end = (this->begin + size - 1);
+            if (size > 0)
+            {
+                this->begin = data;
+                this->end = (this->begin + size - 1);
+            }
+        }
     }
 
 
@@ -204,10 +229,12 @@ namespace aea
     void DArray<T>::pushfront(const T& item)
     {
         const std::uint64_t size = this->size() + 1;
+        T* data = nullptr;
 
-        T* data = new T[size];
+        if (size == 1) { data = new T; }
+        else if (size > 1) { data = new T[size]; }
+
         aea::arrmove((data + 1), this->begin, (size - 1));
-
         this->reset();
 
         data[0] = item;
@@ -221,10 +248,12 @@ namespace aea
     void DArray<T>::pushfront(T&& item)
     {
         const std::uint64_t size = this->size() + 1;
+        T* data = nullptr;
 
-        T* data = new T[size];
+        if (size == 1) { data = new T; }
+        else if (size > 1) { data = new T[size]; }
+
         aea::arrmove((data + 1), this->begin, (size - 1));
-
         this->reset();
 
         data[0] = std::move(item);
@@ -237,15 +266,23 @@ namespace aea
     template<typename T>
     void DArray<T>::popfront()
     {
-        const std::uint64_t size = this->size() - 1;
+        if (this->begin != nullptr)
+        {
+            const std::uint64_t size = this->size() - 1;
+            T* data = nullptr;
 
-        T* data = new T[size];
-        aea::arrmove(data, (this->begin + 1), size);
+            if (size == 1) { data = new T; }
+            else if (size > 1) { data = new T[size]; }
 
-        this->reset();
+            aea::arrmove(data, (this->begin + 1), size);
+            this->reset();
 
-        this->begin = data;
-        this->end = (this->begin + size - 1);
+            if (size > 0)
+            {
+                this->begin = data;
+                this->end = (this->begin + size - 1);
+            }
+        }
     }
 
 
@@ -258,7 +295,10 @@ namespace aea
         }
 
         const std::uint64_t size = this->size() + 1;
-        T* data = new T[size];
+        T* data = nullptr;
+
+        if (size == 1) { data = new T; }
+        else if (size > 1) { data = new T[size]; }
 
         for (std::uint64_t i = 0; i < size; ++i)
         {
@@ -291,7 +331,10 @@ namespace aea
         }
 
         const std::uint64_t size = this->size() + 1;
-        T* data = new T[size];
+        T* data = nullptr;
+
+        if (size == 1) { data = new T; }
+        else if (size > 1) { data = new T[size]; }
 
         for (std::uint64_t i = 0; i < size; ++i)
         {
@@ -324,7 +367,10 @@ namespace aea
         }
 
         const std::uint64_t size = this->size() - 1;
-        T* data = new T[size];
+        T* data = nullptr;
+
+        if (size == 1) { data = new T; }
+        else if (size > 1) { data = new T[size]; }
 
         for (std::uint64_t i = 0; i < size; ++i)
         {
@@ -341,8 +387,11 @@ namespace aea
 
         this->reset();
 
-        this->begin = data;
-        this->end = (this->begin + size - 1);
+        if (size > 0)
+        {
+            this->begin = data;
+            this->end = (this->begin + size - 1);
+        }
     }
 }
 

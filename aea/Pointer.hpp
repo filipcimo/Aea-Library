@@ -73,11 +73,16 @@ namespace aea
 
         const std::uint64_t size = ptr.size();
 
-        this->begin = new T[size];
-
-        for (std::uint64_t i = 0; i < size; ++i)
+        if (size > 0)
         {
-            this->begin[i] = ptr.begin[i];
+            if (size == 1) { this->begin = new T; }
+            else if (size > 1) { this->begin = new T[size]; }
+            this->end = (this->begin + size - 1);
+
+            for (std::uint64_t i = 0; i < size; ++i)
+            {
+                this->begin[i] = ptr.begin[i];
+            }
         }
 
         return *this;

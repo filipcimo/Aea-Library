@@ -15,6 +15,7 @@
 #include "Trio.hpp"
 #include "Convert.hpp"
 #include "ThreadPool.hpp"
+#include "Transfer.hpp"
 
 
 #endif  // AEA_HPP
