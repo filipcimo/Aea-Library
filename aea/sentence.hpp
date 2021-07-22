@@ -73,10 +73,14 @@ namespace aea
     {
         const std::uint64_t size = strlen(str); 
 
-        this->begin = new char[size];
-        this->end = (this->begin + size - 1);
+        if (size > 0)
+        {
+            if (size == 1) { this->begin = new char; }
+            else if (size > 1) { this->begin = new char[size]; } 
+            this->end = (this->begin + size - 1);
 
-        strncpy(this->begin, str, size);
+            strncpy(this->begin, str, size);
+        }
     }
 
 
@@ -84,18 +88,27 @@ namespace aea
     {
         const std::uint64_t size = str.size(); 
 
-        this->begin = new char[size];
-        this->end = (this->begin + size - 1);
+        if (size > 0)
+        {
+            if (size == 1) { this->begin = new char; }
+            else if (size > 1) { this->begin = new char[size]; }
+            this->end = (this->begin + size - 1);
 
-        strncpy(this->begin, str.data(), size);
+            strncpy(this->begin, str.data(), size);
+        }
     }
 
 
     sentence::sentence(const std::uint64_t& size, char c)
     {
-        this->begin = new char[size];
-        this->end = (this->begin + size - 1);
-        memset(this->begin, c, size);
+        if (size > 0)
+        {
+            if (size == 1) { this->begin = new char; }
+            else if (size > 1) { this->begin = new char[size]; }
+
+            this->end = (this->begin + size - 1);
+            memset(this->begin, c, size);
+        }
     }
 
 
@@ -136,10 +149,14 @@ namespace aea
         {
             const std::uint64_t size = strlen(str);
 
-            this->begin = new char[size];
-            this->end = (this->begin + size - 1);
+            if (size > 0)
+            {
+                if (size == 1) { this->begin = new char; }
+                else if (size > 1) { this->begin = new char[size]; }
 
-            strncpy(this->begin, str, size);
+                this->end = (this->begin + size - 1);
+                strncpy(this->begin, str, size);
+            }
         }
 
         return *this;
@@ -154,10 +171,15 @@ namespace aea
         {
             const std::uint64_t size = str.size();
 
-            this->begin = new char[size];
-            this->end = (this->begin + size - 1);
+            if (size > 0)
+            {
+                if (size == 1) { this->begin = new char; }
+                else if (size > 1) { this->begin = new char[size]; }
 
-            strncpy(this->begin, str.data(), size);
+                this->end = (this->begin + size - 1);
+
+                strncpy(this->begin, str.data(), size);
+            }
         }
 
         return *this;
@@ -170,12 +192,16 @@ namespace aea
 
         const std::uint64_t size = list.size();
 
-        this->begin = new char[size];
-        this->end = (this->begin + size - 1);
-
-        for (std::uint64_t i = 0; i < size; ++i)
+        if (size > 0)
         {
-            this->begin[i] = *list.begin() + i;
+            if (size == 1) { this->begin = new char; }
+            else if (size > 1) { this->begin = new char[size]; }
+            this->end = (this->begin + size - 1);
+
+            for (std::uint64_t i = 0; i < size; ++i)
+            {
+                this->begin[i] = *list.begin() + i;
+            }
         }
 
         return *this;
@@ -190,10 +216,14 @@ namespace aea
 
             const std::uint64_t size = obj.size();
 
-            this->begin = new char[size];
-            this->end = (this->begin + size - 1);
+            if (size > 0)
+            {
+                if (size == 1) { this->begin = new char; }
+                else if (size > 1) { this->begin = new char[size]; }
 
-            strncpy(this->begin, obj.begin, size);
+                this->end = (this->begin + size - 1);
+                strncpy(this->begin, obj.begin, size);
+            }
         }
 
         return *this;
@@ -229,8 +259,11 @@ namespace aea
     sentence& sentence::operator+=(char c)
     {
         const std::uint64_t size = this->size() + 1;
+        char* data = nullptr;
 
-        char* data = new char[size];
+        if (size == 1) { data = new char; }
+        else if (size > 1) { data = new char[size]; }
+
         strncpy(data, this->begin, (size - 1));
 
         this->reset();
@@ -248,17 +281,23 @@ namespace aea
     {
         if (obj.begin != nullptr)
         {
-            const std::uint64_t size = this->size();
+            const std::uint64_t size = this->size() + obj.size();
 
-            char* data = new char[size];
-            strncpy(data, this->begin, size);
+            if (size > 0)
+            {
+                char* data = nullptr;
 
-            this->reset();
+                if (size == 1) { data = new char; }
+                else if (size > 1) { data = new char[size]; }
 
-            strncpy((data + size), obj.begin, obj.size());
+                strncpy(data, this->begin, this->size());
+                if (obj.size() > 0) { strncpy((data + this->size()), obj.begin, obj.size()); }
 
-            this->begin = data;
-            this->end = (this->begin + (size + obj.size()) - 1);
+                this->reset();
+
+                this->begin = data;
+                this->end = (this->begin + size - 1);
+            }
         }
 
         return *this;
@@ -322,7 +361,11 @@ namespace aea
 
             else if (inputBytes > 0)
             {
-                char* beginTemp = new char[inputBytes];
+                char* beginTemp = nullptr;
+
+                if (inputBytes == 1) { beginTemp = new char; }
+                else if (inputBytes > 1) { beginTemp = new char[inputBytes]; }
+
                 strncpy(beginTemp, this->begin, inputBytes);
                 delete [] this->begin;
 
@@ -341,7 +384,9 @@ namespace aea
 
         std::uint64_t inputBytes = 0;
 
-        this->begin = new char[size];
+        if (size == 1) { this->begin = new char; }
+        else if (size > 1) { this->begin = new char[size]; }
+
         this->end = (this->begin + size - 1);
         char* position = this->begin;
 
@@ -350,8 +395,8 @@ namespace aea
             char inputByte = std::getchar();
             inputBytes += 1;
 
-            if (inputBytes == size && inputByte != EOF) { *position = inputByte; break; }
-            else if (inputBytes == size || inputByte == '\n' || inputByte == EOF) { break; }
+            if (inputBytes == size && inputByte != EOF && inputByte != '\n') { *position = inputByte; break; }
+            else if (inputBytes == size || inputByte == '\n' || inputByte == EOF) { inputBytes -= 1; break; }
 
             *position = inputByte;
             position += 1;
@@ -359,22 +404,30 @@ namespace aea
 
 
         if (inputBytes < size)
-        {
+        {            
             if (inputBytes == 0)
             {
-                delete [] begin;
+                if (size == 1) { delete begin; } 
+                else if (size > 1) { delete [] begin; }
+
                 this->begin = nullptr;
                 this->end = nullptr;
             }
 
             else if (inputBytes > 0)
             {
-                char* beginTemp = new char[inputBytes - 1];
-                strncpy(beginTemp, this->begin, inputBytes - 1);
-                delete [] this->begin;
+                char* beginTemp = nullptr;
+
+                if (inputBytes == 1) { beginTemp = new char; }
+                else if (inputBytes > 1) { beginTemp = new char[inputBytes]; }
+
+                strncpy(beginTemp, this->begin, inputBytes);
+                
+                if (size == 1) { delete begin; } 
+                else if (size > 1) { delete [] begin; }
 
                 this->begin = beginTemp;
-                this->end = (this->begin + inputBytes - 2);
+                this->end = (this->begin + inputBytes - 1);
             }
         }
 
@@ -403,13 +456,16 @@ namespace aea
 
     void sentence::insert(const std::uint64_t& position, char c)
     {
-        if (this->begin == nullptr || position >= this->size())
+        if (this->size() > 0 && position >= this->size())
         {
             throw std::out_of_range("Index out of range (Index: " + std::to_string(position) + ")");
         }
 
         const std::uint64_t size = this->size() + 1;
-        char* data = new char[size];
+        char* data = nullptr;
+
+        if (size == 1) { data = new char; }
+        else if (size > 1) { data = new char[size]; }
 
         for (std::uint64_t i = 0; i < size; ++i)
         {
@@ -441,7 +497,10 @@ namespace aea
         }
 
         const std::uint64_t size = this->size() - 1;
-        char* data = new char[size];
+        char* data = nullptr;
+
+        if (size == 1) { data = new char; }
+        else if (size > 1) { data = new char[size]; }
 
         for (std::uint64_t i = 0; i < size; ++i)
         {

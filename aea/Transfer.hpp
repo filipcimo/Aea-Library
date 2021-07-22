@@ -19,52 +19,54 @@ namespace aea
             Transfer& operator=(const Transfer& obj) = delete;
             Transfer& operator=(Transfer&& obj) = delete;
 
-            static void set(const std::uint16_t& count, const std::uint16_t& buffersSize = 65535);
-            static void transfer(const std::uint16_t& pipe, const aea::BasicContainer<char>& data);
-            static void pick(const std::uint16_t& pipe, aea::BasicContainer<char>& data);
+            static void set(const std::uint16_t& size, const std::uint16_t& buffersSize = 65535);
+            static void transfer(const std::uint16_t& transfer, const aea::BasicContainer<char>& data);
+            static void pick(const std::uint16_t& transfer, aea::BasicContainer<char>& data);
             static std::uint16_t size();
             static std::uint16_t buffersSize();
 
 
         private:
-            static aea::DArray<aea::DArray<char>> pipes;
+            static aea::DArray<aea::DArray<char>> transfers;
     };
 
 
-    aea::DArray<aea::DArray<char>> Transfer::pipes;
+    aea::DArray<aea::DArray<char>> Transfer::transfers;
 
-    void Transfer::set(const std::uint16_t& count, const std::uint16_t& buffersSize)
+    void Transfer::set(const std::uint16_t& size, const std::uint16_t& buffersSize)
     {
-        pipes.resize(count);
+        transfers.resize(size);
 
-        for (aea::DArray<char>* pipe = nullptr; 
-             aea::iterate_front(&pipe, pipes, pipes.first()) != nullptr;)
+        for (aea::DArray<char>* transfer = nullptr; 
+             aea::iterate_front(&transfer, transfers, transfers.first()) != nullptr;)
         {
-            pipe->resize(buffersSize);
+            transfer->resize(buffersSize);
         }
     }
 
 
-    void Transfer::transfer(const std::uint16_t& pipe, const aea::BasicContainer<char>& data)
+    void Transfer::transfer(const std::uint16_t& transfer, const aea::BasicContainer<char>& data)
     {
-        *static_cast<BasicContainer<char>*>(&pipes.at(pipe)) = data;
+        if (data.size() >= transfers.at(transfer).size()) { strncpy(transfers.at(transfer).get(), data.get(), transfers.at(transfer).size()); }
+        else { strncpy(transfers.at(transfer).get(), data.get(), data.size()); }
     }
 
 
-    void Transfer::pick(const std::uint16_t& pipe, aea::BasicContainer<char>& data)
+    void Transfer::pick(const std::uint16_t& transfer, aea::BasicContainer<char>& data)
     {
-        data = pipes.at(pipe);
+        data = transfers.at(transfer);
     }
 
 
     std::uint16_t Transfer::size()
     {
-        return pipes.size();
+        return transfers.size();
     }
+
 
     std::uint16_t Transfer::buffersSize()
     {
-        if (pipes.size() > 0) { return pipes.at(0).size(); }
+        if (transfers.size() > 0) { return transfers.at(0).size(); }
         return 0;
     }
 }
