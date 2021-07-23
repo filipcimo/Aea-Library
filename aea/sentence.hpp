@@ -565,7 +565,7 @@ namespace aea
             else 
             {  
                 position += 1;
-                if (position == size) { break; }
+                if (position == static_cast<std::int64_t>(size)) { break; }
                 beginTemp += 1;
             }
         }
@@ -812,7 +812,7 @@ namespace aea
 
 
         delitel = on;
-        for (std::uint64_t i = 0; i <= on; ++i)
+        for (std::uint64_t i = 0; i <= static_cast<std::uint64_t>(on); ++i)
         {
             short int temp = this->begin[i] - '0';
             vys += temp * pow(10, delitel);

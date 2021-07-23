@@ -42,11 +42,21 @@ namespace aea
 
     ThreadPool::ThreadPool(const std::uint32_t& size)
     {
-        threads = std::move(aea::Pointer<std::thread>(new std::thread[size], size));
-        functionsToExecute = std::move(aea::Pointer<std::function<void()>>(new std::function<void()>[size], size));
-        threadsToExecute = std::move(aea::Pointer<bool>(new bool[size], size));
-        memset((void*) threadsToExecute.get(), 0, threadsToExecute.size());
+        if (size == 1)
+        {
+            threads = std::move(aea::Pointer<std::thread>(new std::thread));
+            functionsToExecute = std::move(aea::Pointer<std::function<void()>>(new std::function<void()>));
+            threadsToExecute = std::move(aea::Pointer<bool>(new bool));
+        }
 
+        else if (size > 1)
+        {
+            threads = std::move(aea::Pointer<std::thread>(new std::thread[size], size));
+            functionsToExecute = std::move(aea::Pointer<std::function<void()>>(new std::function<void()>[size], size));
+            threadsToExecute = std::move(aea::Pointer<bool>(new bool[size], size));
+        }
+
+        memset((void*) threadsToExecute.get(), 0, threadsToExecute.size());
         isRunnning = true;
     
         for (std::uint32_t i = 0; i < size; ++i)
