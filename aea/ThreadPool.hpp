@@ -15,15 +15,16 @@ namespace aea
             ThreadPool() = default;
             explicit ThreadPool(const std::uint32_t& size);
             ThreadPool(const ThreadPool& obj) = delete;
-            ThreadPool(ThreadPool&& obj);
+            ThreadPool(ThreadPool&& obj) = delete;
             ~ThreadPool();
 
             ThreadPool& operator=(const ThreadPool& obj) = delete;
-            ThreadPool& operator=(ThreadPool&& obj);
+            ThreadPool& operator=(ThreadPool&& obj) = delete;
 
-            template<typename Function> void add(Function&& function);
-            std::uint32_t size() const;
             bool running() const;
+            std::uint32_t size() const;
+            void reset();
+            template<typename Function> void add(Function&& function);
 
 
         private:
@@ -66,38 +67,31 @@ namespace aea
     }
 
 
-    ThreadPool::ThreadPool(ThreadPool&& obj)
-    {
-        isRunnning = obj.isRunnning;
-        obj.isRunnning = false;
-
-        threads = std::move(obj.threads);
-        threadsToExecute = std::move(obj.threadsToExecute);
-        functionsToExecute = std::move(obj.functionsToExecute);
-    }
-
-
     ThreadPool::~ThreadPool()
     {
         isRunnning = false;
 
-        for (std::thread* singleThread = nullptr; aea::iterate_front(&singleThread, threads, threads.first()) != nullptr;)
+        for (std::thread* singleThread = nullptr;
+             aea::iterate_front(&singleThread, threads, threads.first()) != nullptr;)
         {
             singleThread->join();
         }
     }
 
 
-    ThreadPool& ThreadPool::operator=(ThreadPool&& obj)
+    void ThreadPool::reset()
     {
-        isRunnning = obj.isRunnning;
-        obj.isRunnning = false;
+        isRunnning = false;
 
-        threads = std::move(obj.threads);
-        threadsToExecute = std::move(obj.threadsToExecute);
-        functionsToExecute = std::move(obj.functionsToExecute);
+        for (std::thread* singleThread = nullptr;
+             aea::iterate_front(&singleThread, threads, threads.first()) != nullptr;)
+        {
+            singleThread->join();
+        }
 
-        return *this;
+        threads.reset();
+        threadsToExecute.reset();
+        functionsToExecute.reset();
     }
 
 
