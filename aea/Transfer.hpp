@@ -10,10 +10,10 @@ namespace aea
     class Transfer
     {
         public:
-            Transfer() = default;
+            Transfer() = delete;
             Transfer(const Transfer& obj) = delete;
             Transfer(Transfer&& obj) = delete;
-            ~Transfer();
+            ~Transfer() = delete;
 
             Transfer& operator=(const Transfer& obj) = delete;
             Transfer& operator=(Transfer&& obj) = delete;
