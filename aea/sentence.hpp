@@ -57,7 +57,7 @@ namespace aea
 
 
         protected:
-            std::ostream& print(std::ostream& os) const;
+            std::ostream& print(std::ostream& os) const override;
     };
 
 
@@ -75,8 +75,7 @@ namespace aea
 
         if (size > 0)
         {
-            if (size == 1) { this->begin = new char; }
-            else if (size > 1) { this->begin = new char[size]; } 
+            this->begin = this->getAllocatedMemory(size);
             this->end = (this->begin + size - 1);
 
             strncpy(this->begin, str, size);
@@ -90,8 +89,7 @@ namespace aea
 
         if (size > 0)
         {
-            if (size == 1) { this->begin = new char; }
-            else if (size > 1) { this->begin = new char[size]; }
+            this->begin = this->getAllocatedMemory(size);
             this->end = (this->begin + size - 1);
 
             strncpy(this->begin, str.data(), size);
@@ -103,10 +101,9 @@ namespace aea
     {
         if (size > 0)
         {
-            if (size == 1) { this->begin = new char; }
-            else if (size > 1) { this->begin = new char[size]; }
-
+            this->begin = this->getAllocatedMemory(size);
             this->end = (this->begin + size - 1);
+
             memset(this->begin, c, size);
         }
     }
@@ -151,10 +148,9 @@ namespace aea
 
             if (size > 0)
             {
-                if (size == 1) { this->begin = new char; }
-                else if (size > 1) { this->begin = new char[size]; }
-
+                this->begin = this->getAllocatedMemory(size);
                 this->end = (this->begin + size - 1);
+
                 strncpy(this->begin, str, size);
             }
         }
@@ -173,9 +169,7 @@ namespace aea
 
             if (size > 0)
             {
-                if (size == 1) { this->begin = new char; }
-                else if (size > 1) { this->begin = new char[size]; }
-
+                this->begin = this->getAllocatedMemory(size);
                 this->end = (this->begin + size - 1);
 
                 strncpy(this->begin, str.data(), size);
@@ -194,8 +188,7 @@ namespace aea
 
         if (size > 0)
         {
-            if (size == 1) { this->begin = new char; }
-            else if (size > 1) { this->begin = new char[size]; }
+            this->begin = this->getAllocatedMemory(size);
             this->end = (this->begin + size - 1);
 
             for (std::uint64_t i = 0; i < size; ++i)
@@ -218,10 +211,9 @@ namespace aea
 
             if (size > 0)
             {
-                if (size == 1) { this->begin = new char; }
-                else if (size > 1) { this->begin = new char[size]; }
-
+                this->begin = this->getAllocatedMemory(size);
                 this->end = (this->begin + size - 1);
+
                 strncpy(this->begin, obj.begin, size);
             }
         }
@@ -259,13 +251,9 @@ namespace aea
     sentence& sentence::operator+=(char c)
     {
         const std::uint64_t size = this->size() + 1;
-        char* data = nullptr;
-
-        if (size == 1) { data = new char; }
-        else if (size > 1) { data = new char[size]; }
+        char* data = this->getAllocatedMemory(size);
 
         strncpy(data, this->begin, (size - 1));
-
         this->reset();
 
         data[size - 1] = c;
@@ -285,10 +273,7 @@ namespace aea
 
             if (size > 0)
             {
-                char* data = nullptr;
-
-                if (size == 1) { data = new char; }
-                else if (size > 1) { data = new char[size]; }
+                char* data = this->getAllocatedMemory(size);
 
                 strncpy(data, this->begin, this->size());
                 if (obj.size() > 0) { strncpy((data + this->size()), obj.begin, obj.size()); }
@@ -354,17 +339,12 @@ namespace aea
         {
             if (inputBytes == 0)
             {
-                delete [] begin;
-                this->begin = nullptr;
-                this->end = nullptr;
+                this->reset();
             }
 
             else if (inputBytes > 0)
             {
-                char* beginTemp = nullptr;
-
-                if (inputBytes == 1) { beginTemp = new char; }
-                else if (inputBytes > 1) { beginTemp = new char[inputBytes]; }
+                char* beginTemp = this->getAllocatedMemory(inputBytes);
 
                 strncpy(beginTemp, this->begin, inputBytes);
                 delete [] this->begin;
@@ -384,9 +364,7 @@ namespace aea
 
         std::uint64_t inputBytes = 0;
 
-        if (size == 1) { this->begin = new char; }
-        else if (size > 1) { this->begin = new char[size]; }
-
+        this->begin = this->getAllocatedMemory(size);
         this->end = (this->begin + size - 1);
         char* position = this->begin;
 
@@ -407,24 +385,15 @@ namespace aea
         {            
             if (inputBytes == 0)
             {
-                if (size == 1) { delete begin; } 
-                else if (size > 1) { delete [] begin; }
-
-                this->begin = nullptr;
-                this->end = nullptr;
+                this->reset();
             }
 
             else if (inputBytes > 0)
             {
-                char* beginTemp = nullptr;
-
-                if (inputBytes == 1) { beginTemp = new char; }
-                else if (inputBytes > 1) { beginTemp = new char[inputBytes]; }
+                char* beginTemp = this->getAllocatedMemory(inputBytes);
 
                 strncpy(beginTemp, this->begin, inputBytes);
-                
-                if (size == 1) { delete begin; } 
-                else if (size > 1) { delete [] begin; }
+                this->reset();
 
                 this->begin = beginTemp;
                 this->end = (this->begin + inputBytes - 1);
@@ -497,10 +466,7 @@ namespace aea
         }
 
         const std::uint64_t size = this->size() - 1;
-        char* data = nullptr;
-
-        if (size == 1) { data = new char; }
-        else if (size > 1) { data = new char[size]; }
+        char* data = this->getAllocatedMemory(size);
 
         for (std::uint64_t i = 0; i < size; ++i)
         {

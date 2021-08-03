@@ -24,7 +24,7 @@ namespace aea
 
 
         protected:
-            virtual std::ostream& print(std::ostream& os) const;
+            virtual std::ostream& print(std::ostream& os) const override;
     };
 
 
@@ -75,8 +75,7 @@ namespace aea
 
         if (size > 0)
         {
-            if (size == 1) { this->begin = new T; }
-            else if (size > 1) { this->begin = new T[size]; }
+            this->begin = this->getAllocatedMemory(size);
             this->end = (this->begin + size - 1);
 
             for (std::uint64_t i = 0; i < size; ++i)

@@ -23,7 +23,7 @@ namespace aea
             Duo<T, T2>& operator=(const Duo<T, T2>& obj);
             Duo<T, T2>& operator=(Duo<T, T2>&& obj);
 
-            virtual void reset();
+            virtual void reset() override;
             T* first() const;
             T2* second() const;
 

@@ -5,7 +5,7 @@
 #include "BasicContainer.hpp"
 #include "var.hpp"
 #include "sentence.hpp"
-#include "DArray.hpp"
+#include "DynamicArray.hpp"
 #include "Pointer.hpp"
 #include "Functions.hpp"
 #include "ListNode.hpp"

@@ -23,11 +23,12 @@ namespace aea
             List<T>& operator=(List<T>&& obj);
             List<T>& operator=(const std::initializer_list<ListNode<T>>& list);
 
-            virtual void reset();
-            virtual ListNode<T>* get() const;
-            virtual ListNode<T>& at(const std::uint64_t& position) const;
-            virtual ListNode<T>& operator[](const std::uint64_t& position) const;
-            virtual std::uint64_t size() const;
+            virtual void reset() override;
+            virtual ListNode<T>* get() const override;
+            virtual ListNode<T>& at(const std::uint64_t& position) const override;
+            virtual ListNode<T>& operator[](const std::uint64_t& position) const override;
+            virtual std::uint64_t size() const override;
+
             void add(const ListNode<T>& item);
             void add(ListNode<T>&& item);
             void add(const std::uint64_t& position, const ListNode<T>& item);
@@ -37,7 +38,7 @@ namespace aea
 
         
         protected:
-            virtual std::ostream& print(std::ostream& os) const;
+            virtual std::ostream& print(std::ostream& os) const override;
     };
 
 

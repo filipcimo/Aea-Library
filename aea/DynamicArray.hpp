@@ -1,5 +1,5 @@
-#ifndef DARRAY_HPP
-#define DARRAY_HPP
+#ifndef DYNAMIC_ARRAY_HPP
+#define DYNAMIC_ARRAY_HPP
 
 #include "BasicContainer.hpp"
 
@@ -8,19 +8,19 @@
 namespace aea
 {
     template<typename T>
-    class DArray : public BasicContainer<T>
+    class DynamicArray : public BasicContainer<T>
     {
         public:
-            DArray() = default;
-            explicit DArray(const std::uint64_t& size);
-            DArray(const std::initializer_list<T>& list);
-            DArray(const T* const ptr, const std::uint64_t& size);
-            DArray(const DArray<T>& obj);
-            DArray(DArray<T>&& obj);
-            virtual ~DArray() = default;
+            DynamicArray() = default;
+            explicit DynamicArray(const std::uint64_t& size);
+            DynamicArray(const std::initializer_list<T>& list);
+            DynamicArray(const T* const ptr, const std::uint64_t& size);
+            DynamicArray(const DynamicArray<T>& obj);
+            DynamicArray(DynamicArray<T>&& obj);
+            virtual ~DynamicArray() = default;
 
-            DArray<T>& operator=(const DArray<T>& obj);
-            DArray<T>& operator=(DArray<T>&& obj);
+            DynamicArray<T>& operator=(const DynamicArray<T>& obj);
+            DynamicArray<T>& operator=(DynamicArray<T>&& obj);
 
             void pushback(const T& item);
             void pushback(T&& item);
@@ -35,52 +35,49 @@ namespace aea
 
 
         protected:
-            virtual std::ostream& print(std::ostream& os) const;
+            virtual std::ostream& print(std::ostream& os) const override;
     };
 
 
 
     template<typename T>
-    DArray<T>::DArray(const std::uint64_t& size)
+    DynamicArray<T>::DynamicArray(const std::uint64_t& size)
     {   
         if (size > 0)
         {
-            if (size == 1) { this->begin = new T; }
-            else if (size > 1) { this->begin = new T[size]; }
-
+            this->begin = this->getAllocatedMemory(size);
             this->end = (this->begin + size - 1);
         }
     }
 
 
     template<typename T>
-    DArray<T>::DArray(const std::initializer_list<T>& list) : BasicContainer<T>(list)
+    DynamicArray<T>::DynamicArray(const std::initializer_list<T>& list) : BasicContainer<T>(list)
     {
 
     }
 
 
     template<typename T>
-    DArray<T>::DArray(const DArray<T>& obj) : BasicContainer<T>(obj)
-    {
-        
-    }
-
-
-    template<typename T>
-    DArray<T>::DArray(DArray<T>&& obj) : BasicContainer<T>(std::move(obj))
+    DynamicArray<T>::DynamicArray(const DynamicArray<T>& obj) : BasicContainer<T>(obj)
     {
         
     }
 
 
     template<typename T>
-    DArray<T>::DArray(const T* const ptr, const std::uint64_t& size)
+    DynamicArray<T>::DynamicArray(DynamicArray<T>&& obj) : BasicContainer<T>(std::move(obj))
+    {
+        
+    }
+
+
+    template<typename T>
+    DynamicArray<T>::DynamicArray(const T* const ptr, const std::uint64_t& size)
     {
         if (ptr != nullptr && size > 0)
         {
-            if (size == 1) { this->begin = new T; }
-            else if (size > 1) { this->begin = new T[size]; }
+            this->begin = this->getAllocatedMemory(size);
             this->end = (this->begin + size - 1);
 
             aea::arrcopy(this->begin, ptr, size);
@@ -89,7 +86,7 @@ namespace aea
 
 
     template<typename T>
-    DArray<T>& DArray<T>::operator=(const DArray<T>& obj)
+    DynamicArray<T>& DynamicArray<T>::operator=(const DynamicArray<T>& obj)
     {   
         if (obj.begin != nullptr)
         {
@@ -99,8 +96,7 @@ namespace aea
 
             if (size > 0)
             {
-                if (size == 1) { this->begin = new T; }
-                else if (size > 1) { this->begin = new T[size]; }
+                this->begin = this->getAllocatedMemory(size);
                 this->end = (this->begin + size - 1);
 
                 aea::arrcopy(this->begin, obj.begin, size);
@@ -112,7 +108,7 @@ namespace aea
 
 
     template<typename T>
-    DArray<T>& DArray<T>::operator=(DArray<T>&& obj)
+    DynamicArray<T>& DynamicArray<T>::operator=(DynamicArray<T>&& obj)
     {
         this->reset();
 
@@ -127,14 +123,14 @@ namespace aea
 
 
     template<typename T>
-    std::ostream& DArray<T>::print(std::ostream& os) const
+    std::ostream& DynamicArray<T>::print(std::ostream& os) const
     {
         return os;
     }
 
 
     template<typename T>
-    void DArray<T>::resize(const std::uint64_t& size)
+    void DynamicArray<T>::resize(const std::uint64_t& size)
     {
         if (size == 0) 
         { 
@@ -148,10 +144,7 @@ namespace aea
 
         else 
         {
-            T* newData = nullptr;
-
-            if (size == 1) { newData = new T; }
-            else if (size > 1) { newData = new T[size]; }
+            T* newData = this->getAllocatedMemory(size);
 
             if (size > this->size()) { aea::arrmove(newData, this->begin, this->size()); }
             else if (size < this->size()) { aea::arrmove(newData, this->begin, size); }
@@ -165,13 +158,10 @@ namespace aea
 
 
     template<typename T>
-    void DArray<T>::pushback(const T& item)
+    void DynamicArray<T>::pushback(const T& item)
     {
         const std::uint64_t size = this->size() + 1;
-        T* data = nullptr;
-
-        if (size == 1) { data = new T; }
-        else if (size > 1) { data = new T[size]; }
+        T* data = this->getAllocatedMemory(size);
 
         aea::arrmove(data, this->begin, (size - 1));
         this->reset();
@@ -184,13 +174,10 @@ namespace aea
 
 
     template<typename T>
-    void DArray<T>::pushback(T&& item)
+    void DynamicArray<T>::pushback(T&& item)
     {
         const std::uint64_t size = this->size() + 1;
-        T* data = nullptr;
-
-        if (size == 1) { data = new T; }
-        else if (size > 1) { data = new T[size]; }
+        T* data = this->getAllocatedMemory(size);
 
         aea::arrmove(data, this->begin, (size - 1));
         this->reset();
@@ -203,15 +190,12 @@ namespace aea
 
 
     template<typename T>
-    void DArray<T>::popback()
+    void DynamicArray<T>::popback()
     {
         if (this->begin != nullptr)
         {
             const std::uint64_t size = this->size() - 1;
-            T* data = nullptr;
-
-            if (size == 1) { data = new T; }
-            else if (size > 1) { data = new T[size]; }
+            T* data = this->getAllocatedMemory(size);
 
             aea::arrmove(data, this->begin, size);
             this->reset();
@@ -226,13 +210,10 @@ namespace aea
 
 
     template<typename T>
-    void DArray<T>::pushfront(const T& item)
+    void DynamicArray<T>::pushfront(const T& item)
     {
         const std::uint64_t size = this->size() + 1;
-        T* data = nullptr;
-
-        if (size == 1) { data = new T; }
-        else if (size > 1) { data = new T[size]; }
+        T* data = this->getAllocatedMemory(size);
 
         aea::arrmove((data + 1), this->begin, (size - 1));
         this->reset();
@@ -245,13 +226,10 @@ namespace aea
 
 
     template<typename T>
-    void DArray<T>::pushfront(T&& item)
+    void DynamicArray<T>::pushfront(T&& item)
     {
         const std::uint64_t size = this->size() + 1;
-        T* data = nullptr;
-
-        if (size == 1) { data = new T; }
-        else if (size > 1) { data = new T[size]; }
+        T* data = this->getAllocatedMemory(size);
 
         aea::arrmove((data + 1), this->begin, (size - 1));
         this->reset();
@@ -264,15 +242,12 @@ namespace aea
 
 
     template<typename T>
-    void DArray<T>::popfront()
+    void DynamicArray<T>::popfront()
     {
         if (this->begin != nullptr)
         {
             const std::uint64_t size = this->size() - 1;
-            T* data = nullptr;
-
-            if (size == 1) { data = new T; }
-            else if (size > 1) { data = new T[size]; }
+            T* data = this->getAllocatedMemory(size);
 
             aea::arrmove(data, (this->begin + 1), size);
             this->reset();
@@ -287,7 +262,7 @@ namespace aea
 
 
     template<typename T>
-    void DArray<T>::insert(const std::uint64_t& position, const T& item)
+    void DynamicArray<T>::insert(const std::uint64_t& position, const T& item)
     {
         if (this->begin == nullptr || position >= this->size())
         {
@@ -295,10 +270,7 @@ namespace aea
         }
 
         const std::uint64_t size = this->size() + 1;
-        T* data = nullptr;
-
-        if (size == 1) { data = new T; }
-        else if (size > 1) { data = new T[size]; }
+        T* data = this->getAllocatedMemory(size);
 
         for (std::uint64_t i = 0; i < size; ++i)
         {
@@ -323,7 +295,7 @@ namespace aea
 
 
     template<typename T>
-    void DArray<T>::insert(const std::uint64_t& position, T&& item)
+    void DynamicArray<T>::insert(const std::uint64_t& position, T&& item)
     {
         if (this->begin == nullptr || position >= this->size())
         {
@@ -331,10 +303,7 @@ namespace aea
         }
 
         const std::uint64_t size = this->size() + 1;
-        T* data = nullptr;
-
-        if (size == 1) { data = new T; }
-        else if (size > 1) { data = new T[size]; }
+        T* data = this->getAllocatedMemory(size);
 
         for (std::uint64_t i = 0; i < size; ++i)
         {
@@ -359,7 +328,7 @@ namespace aea
 
 
     template<typename T>
-    void DArray<T>::remove(const std::uint64_t& position)
+    void DynamicArray<T>::remove(const std::uint64_t& position)
     {
         if (this->begin == nullptr || position >= this->size())
         {
@@ -367,10 +336,7 @@ namespace aea
         }
 
         const std::uint64_t size = this->size() - 1;
-        T* data = nullptr;
-
-        if (size == 1) { data = new T; }
-        else if (size > 1) { data = new T[size]; }
+        T* data = this->getAllocatedMemory(size);
 
         for (std::uint64_t i = 0; i < size; ++i)
         {
@@ -397,4 +363,4 @@ namespace aea
 
 
 
-#endif  // DARRAY_HPP
+#endif  // DYNAMIC_ARRAY_HPP

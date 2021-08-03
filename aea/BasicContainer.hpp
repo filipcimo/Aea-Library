@@ -42,6 +42,7 @@ namespace aea
 
 
         protected:
+            virtual T* getAllocatedMemory(const std::uint64_t& size);
             virtual std::ostream& print(std::ostream& os) const = 0;
 
 
@@ -238,6 +239,18 @@ namespace aea
             begin = nullptr;
             end = nullptr;
         }
+    }
+
+
+    template<typename T>
+    T* BasicContainer<T>::getAllocatedMemory(const std::uint64_t& size)
+    {
+        T* newData = nullptr;
+
+        if (size == 1) { newData = new T; }
+        else if (size > 1) { newData = new T[size]; }
+
+        return newData;
     }
 
 

@@ -21,7 +21,7 @@ namespace aea
             Trio<T, T2, T3>& operator=(const Trio<T, T2, T3>& obj);
             Trio<T, T2, T3>& operator=(Trio<T, T2, T3>&& obj);
 
-            virtual void reset();
+            virtual void reset() override;
             T3* third() const;
 
         
