@@ -8,40 +8,30 @@
 
 namespace aea
 {
-    class Convert
+    namespace Convert
     {
-        public:
-            Convert() = default;
-            Convert(const Convert& obj) = delete;
-            Convert(Convert&& obj) = delete;
-            ~Convert() = default;
+        sentence to_sentence(std::int64_t number);
+        sentence to_sentence(std::uint64_t number);
+        sentence to_sentence(float number);
+        sentence to_sentence(double number);
 
-            Convert& operator=(const Convert& obj) = delete;
-            Convert& operator=(Convert&& obj) = delete;
+        std::int8_t to_int8(const sentence& str);
+        std::uint8_t to_uint8(const sentence& str);
 
-            sentence to_sentence(std::int64_t number);
-            sentence to_sentence(std::uint64_t number);
-            sentence to_sentence(float number);
-            sentence to_sentence(double number);
+        std::int16_t to_int16(const sentence& str);
+        std::uint16_t to_uint16(const sentence& str);
 
-            std::int8_t to_int8(const sentence& str);
-            std::uint8_t to_uint8(const sentence& str);
+        std::int32_t to_int32(const sentence& str);
+        std::uint32_t to_uint32(const sentence& str);
 
-            std::int16_t to_int16(const sentence& str);
-            std::uint16_t to_uint16(const sentence& str);
-
-            std::int32_t to_int32(const sentence& str);
-            std::uint32_t to_uint32(const sentence& str);
-
-            std::int64_t to_int64(const sentence& str);
-            std::uint64_t to_uint64(const sentence& str);
-            
-            float to_float(const sentence& str);
-            double to_double(const sentence& str);
-    };
+        std::int64_t to_int64(const sentence& str);
+        std::uint64_t to_uint64(const sentence& str);
+        
+        float to_float(const sentence& str);
+        double to_double(const sentence& str);
+    }
 
     
-
     sentence Convert::to_sentence(std::int64_t number)
     {
         sentence result;
@@ -291,7 +281,7 @@ namespace aea
     {
         if (str.empty() == true || ((sentence*) &str)->isNumber() == false)
         { 
-            return 0; 
+            return 0;
         }
 
         std::int64_t dotPosition = str.find('.');
